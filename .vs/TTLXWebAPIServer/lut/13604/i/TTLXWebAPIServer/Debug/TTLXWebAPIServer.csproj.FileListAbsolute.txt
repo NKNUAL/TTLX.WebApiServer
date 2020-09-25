@@ -1,0 +1,6 @@
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\b\TTLXWebAPIServer\bin\TTLXWebAPIServer.dll.config
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\b\TTLXWebAPIServer\bin\TTLXWebAPIServer.dll
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\TTLXWebAPIServer\Debug\TTLXWebAPIServer.csprojAssemblyReference.cache
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\TTLXWebAPIServer\Debug\TTLXWebAPIServer.csproj.CoreCompileInputs.cache
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\TTLXWebAPIServer\Debug\TTLXWebAPIServer.csproj.CopyComplete
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\TTLXWebAPIServer\Debug\TTLXWebAPIServer.dll

@@ -1,0 +1,16 @@
+ 【时间】:2020-09-24 09:37:14,106
+ 【级别】:ERROR
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 6 
+ 【文件地址】:E:\Code\TTLXExamSystemMonitor\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第66行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-09-24 11:36:58,024
+ 【级别】:ERROR
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 12 
+ 【文件地址】:E:\Code\TTLXExamSystemMonitor\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第66行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------

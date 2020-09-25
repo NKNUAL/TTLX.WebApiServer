@@ -1,0 +1,56 @@
+ 【时间】:2020-08-14 16:22:22,730
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 9 
+ 【文件地址】:F:\VS2017_Projects\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-14 16:24:37,849
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 6 
+ 【文件地址】:F:\VS2017_Projects\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-14 16:24:44,279
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 8 
+ 【文件地址】:F:\VS2017_Projects\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-14 16:24:47,827
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 7 
+ 【文件地址】:F:\VS2017_Projects\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-14 16:24:52,116
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 6 
+ 【文件地址】:F:\VS2017_Projects\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-14 16:31:04,119
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 6 
+ 【文件地址】:F:\VS2017_Projects\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-14 17:19:31,212
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 11 
+ 【文件地址】:F:\VS2017_Projects\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------

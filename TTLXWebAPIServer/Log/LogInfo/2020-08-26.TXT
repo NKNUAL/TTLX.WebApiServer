@@ -1,0 +1,32 @@
+ 【时间】:2020-08-26 10:12:26,772
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 8 
+ 【文件地址】:E:\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-26 10:12:37,308
+ 【级别】:ERROR
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 8 
+ 【文件地址】:E:\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第66行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-26 10:14:05,733
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 10 
+ 【文件地址】:E:\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-26 13:00:36,924
+ 【级别】:ERROR
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 6 
+ 【文件地址】:E:\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第66行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------

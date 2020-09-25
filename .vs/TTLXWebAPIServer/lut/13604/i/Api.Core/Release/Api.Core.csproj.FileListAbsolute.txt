@@ -1,0 +1,7 @@
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\b\Api.Core\bin\Debug\Api.Core.dll.config
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\b\Api.Core\bin\Debug\Api.Core.dll
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\Api.Core\Release\Api.Core.Properties.Resources.resources
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\Api.Core\Release\Api.Core.csproj.GenerateResource.cache
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\Api.Core\Release\Api.Core.csproj.CoreCompileInputs.cache
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\Api.Core\Release\Api.Core.csproj.CopyComplete
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\Api.Core\Release\Api.Core.dll

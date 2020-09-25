@@ -1,0 +1,16 @@
+ 【时间】:2020-08-21 09:34:12,447
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 9 
+ 【文件地址】:F:\VS2017_Projects\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------
+ 【时间】:2020-08-21 13:27:00,423
+ 【级别】:INFO
+ 【类名】:AdoNetAppender_SQLServer
+ 【线程ID】: 11 
+ 【文件地址】:F:\VS2017_Projects\TTLXWebAPIServer\Api.Core\Logger\LogContent.cs 第60行
+ 【日志内容】:Api.Core.Logger.AppOpLog
+ 【日记详细】： 
+---------------------------------------------------------------------------------------------------------------

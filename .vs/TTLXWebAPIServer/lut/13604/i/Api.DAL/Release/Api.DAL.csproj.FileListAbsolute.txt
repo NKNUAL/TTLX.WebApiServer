@@ -1,0 +1,2 @@
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\Api.DAL\Release\Api.DAL.csprojAssemblyReference.cache
+E:\TTLXWebAPIServer\.vs\TTLXWebAPIServer\lut\0\i\Api.DAL\Release\Api.DAL.csproj.CoreCompileInputs.cache

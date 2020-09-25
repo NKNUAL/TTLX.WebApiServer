@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C8ACE817-8B50-4945-83DD-DE62870C7F55}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Api.DAL</RootNamespace>
+    <AssemblyName>Api.DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DALBaseHelper.cs" />
+    <Compile Include="DataContext\DbMonitorSystemContext.cs" />
+    <Compile Include="DataContext\DbServer0905Context.cs" />
+    <Compile Include="DataContext\DbUserAdminContext.cs" />
+    <Compile Include="DataContext\DbUsersContext.cs" />
+    <Compile Include="DbContextFactory.cs" />
+    <Compile Include="Entity_MockTestPaper\Base_courseType.cs" />
+    <Compile Include="Entity_MockTestPaper\Base_courseType_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\Base_knowledgepoint.cs" />
+    <Compile Include="Entity_MockTestPaper\Base_knowledgepoint_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\Base_specialtyType.cs" />
+    <Compile Include="Entity_MockTestPaper\CloudExamRule.cs" />
+    <Compile Include="Entity_MockTestPaper\CloudExamRule_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\ComposeExamSchemaItem.cs" />
+    <Compile Include="Entity_MockTestPaper\CreateQuestionsUsers.cs" />
+    <Compile Include="Entity_MockTestPaper\ExaminationPlan.cs" />
+    <Compile Include="Entity_MockTestPaper\ExaminationStudentList.cs" />
+    <Compile Include="Entity_MockTestPaper\ExamPaper.cs" />
+    <Compile Include="Entity_MockTestPaper\ExamPaperQuestionRelation.cs" />
+    <Compile Include="Entity_MockTestPaper\ExamPaperQuestionRelation_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\ExamPaperQuestionRelation_Computer_ProvinceUnion.cs" />
+    <Compile Include="Entity_MockTestPaper\ExamPaperQuestionRelation_ProvinceUnion.cs" />
+    <Compile Include="Entity_MockTestPaper\ExamPaper_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\ExamPaper_Computer_ProvinceUnion.cs" />
+    <Compile Include="Entity_MockTestPaper\ExamPaper_ProvinceUnion.cs" />
+    <Compile Include="Entity_MockTestPaper\ExamType.cs" />
+    <Compile Include="Entity_MockTestPaper\ExercisePaper.cs" />
+    <Compile Include="Entity_MockTestPaper\ExercisePaperCaozuoTimuRelation.cs" />
+    <Compile Include="Entity_MockTestPaper\ExercisePaperQuestionRelation.cs" />
+    <Compile Include="Entity_MockTestPaper\ExercisePaperQuestionRelation_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\ExercisePaperRelation.cs" />
+    <Compile Include="Entity_MockTestPaper\ExercisePaperRelation_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\ExercisePaper_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\ExerciseScoreResult.cs" />
+    <Compile Include="Entity_MockTestPaper\GetSmsCodeHistory.cs" />
+    <Compile Include="Entity_MockTestPaper\LocalRegInfo.cs" />
+    <Compile Include="Entity_MockTestPaper\MockTestPaper.cs" />
+    <Compile Include="Entity_MockTestPaper\MockTestPaperQuestionRelation.cs" />
+    <Compile Include="Entity_MockTestPaper\MockTestPaperQuestionRelation_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\MockTestPaperRule.cs" />
+    <Compile Include="Entity_MockTestPaper\MockTestPaperRule1.cs" />
+    <Compile Include="Entity_MockTestPaper\MockTestPaper_Computer.cs" />
+    <Compile Include="DataContext\DbMockTestPaperContext.cs" />
+    <Compile Include="Entity_MockTestPaper\PaperCaozuoTimuRelation.cs" />
+    <Compile Include="Entity_MockTestPaper\PaperCaozuoTimuRelation_ProvinceUnion.cs" />
+    <Compile Include="Entity_MockTestPaper\ProvinceUnionExamInfo.cs" />
+    <Compile Include="Entity_MockTestPaper\ProvinceUnionExamStudentList.cs" />
+    <Compile Include="Entity_MockTestPaper\QuestionBankInfo.cs" />
+    <Compile Include="Entity_MockTestPaper\Questionsinfo_New.cs" />
+    <Compile Include="Entity_MockTestPaper\Questionsinfo_New_Computer.cs" />
+    <Compile Include="Entity_MockTestPaper\Questionsinfo_New_Computer_ProvinceUnion.cs" />
+    <Compile Include="Entity_MockTestPaper\Questionsinfo_New_DZSW.cs" />
+    <Compile Include="Entity_MockTestPaper\Questionsinfo_New_ProvinceUnion.cs" />
+    <Compile Include="Entity_MockTestPaper\Questionsinfo_Recommend.cs" />
+    <Compile Include="Entity_MockTestPaper\Questionsinfo_Recommend_Settlement.cs" />
+    <Compile Include="Entity_MockTestPaper\QuestionsReviewRecord.cs" />
+    <Compile Include="Entity_MockTestPaper\QuestionsType.cs" />
+    <Compile Include="Entity_MockTestPaper\ResultValueTable.cs" />
+    <Compile Include="Entity_MockTestPaper\ReviewQuestionsUsers.cs" />
+    <Compile Include="Entity_MockTestPaper\ScoreResultDetail.cs" />
+    <Compile Include="Entity_MockTestPaper\UserQuestionMockTestPaper.cs" />
+    <Compile Include="Entity_MockTestPaper\UserQuestionMockTestPaperQuestionRelation.cs" />
+    <Compile Include="Entity_MockTestPaper\UserQuestionRules.cs" />
+    <Compile Include="Entity_MockTestPaper\UserQuestionRules_Course_Relation.cs" />
+    <Compile Include="Entity_MockTestPaper\UserQuestionRules_Know_Relation.cs" />
+    <Compile Include="Entity_MockTestPaper\UserTable.cs" />
+    <Compile Include="Entity_MonitorSystem\Base_Province.cs" />
+    <Compile Include="Entity_MonitorSystem\Base_specialtyType.cs" />
+    <Compile Include="Entity_MonitorSystem\LogDetails.cs" />
+    <Compile Include="Entity_MonitorSystem\PaperInfo.cs" />
+    <Compile Include="Entity_MonitorSystem\Questionsinfo_Local.cs" />
+    <Compile Include="Entity_MonitorSystem\Questionsinfo_Local2.cs" />
+    <Compile Include="Entity_MonitorSystem\SchoolBasicInfos.cs" />
+    <Compile Include="Entity_MonitorSystem\SchoolDataUploadTime.cs" />
+    <Compile Include="Entity_MonitorSystem\SchoolSpecialtyExpireDate.cs" />
+    <Compile Include="Entity_MonitorSystem\SysDbType.cs" />
+    <Compile Include="Entity_MonitorSystem\UserTable.cs" />
+    <Compile Include="Entity_MonitorSystem\UseStatusInfo_Exam.cs" />
+    <Compile Include="Entity_MonitorSystem\UseStatusInfo_Exercise.cs" />
+    <Compile Include="Entity_Server0905\Base_courseType.cs" />
+    <Compile Include="Entity_Server0905\Base_courseType_Computer.cs" />
+    <Compile Include="Entity_Server0905\Base_courseType_Local.cs" />
+    <Compile Include="Entity_Server0905\Base_knowledgepoint.cs" />
+    <Compile Include="Entity_Server0905\Base_knowledgepoint_Computer.cs" />
+    <Compile Include="Entity_Server0905\Base_Province.cs" />
+    <Compile Include="Entity_Server0905\Base_School.cs" />
+    <Compile Include="Entity_Server0905\Base_specialtyType.cs" />
+    <Compile Include="Entity_Server0905\CloudExamRule.cs" />
+    <Compile Include="Entity_Server0905\CloudExamRule_Computer.cs" />
+    <Compile Include="Entity_Server0905\ComposeExamSchema.cs" />
+    <Compile Include="Entity_Server0905\ComposeExamSchemaItem.cs" />
+    <Compile Include="Entity_Server0905\ErrorQuestionReviewUser.cs" />
+    <Compile Include="Entity_Server0905\ErrorQuestions.cs" />
+    <Compile Include="Entity_Server0905\ErrorQuestionsModifyRecord.cs" />
+    <Compile Include="Entity_Server0905\ExaminationPlan.cs" />
+    <Compile Include="Entity_Server0905\ExaminationStudentList.cs" />
+    <Compile Include="Entity_Server0905\ExamPaper.cs" />
+    <Compile Include="Entity_Server0905\ExamPaperQuestionRelation.cs" />
+    <Compile Include="Entity_Server0905\ExamPaperQuestionRelation_Computer.cs" />
+    <Compile Include="Entity_Server0905\ExamPaperQuestionRelation_Computer_ProvinceUnion.cs" />
+    <Compile Include="Entity_Server0905\ExamPaperQuestionRelation_ProvinceUnion.cs" />
+    <Compile Include="Entity_Server0905\ExamPaper_Computer.cs" />
+    <Compile Include="Entity_Server0905\ExamPaper_Computer_ProvinceUnion.cs" />
+    <Compile Include="Entity_Server0905\ExamPaper_ProvinceUnion.cs" />
+    <Compile Include="Entity_Server0905\ExamType.cs" />
+    <Compile Include="Entity_Server0905\ExerciseInfo.cs" />
+    <Compile Include="Entity_Server0905\ExercisePaper.cs" />
+    <Compile Include="Entity_Server0905\ExercisePaperCaozuoTimuRelation.cs" />
+    <Compile Include="Entity_Server0905\ExercisePaperQuestionRelation.cs" />
+    <Compile Include="Entity_Server0905\ExercisePaperQuestionRelation_Computer.cs" />
+    <Compile Include="Entity_Server0905\ExercisePaperRelation.cs" />
+    <Compile Include="Entity_Server0905\ExercisePaperRelation_Computer.cs" />
+    <Compile Include="Entity_Server0905\ExercisePaper_Computer.cs" />
+    <Compile Include="Entity_Server0905\ExerciseScoreResult.cs" />
+    <Compile Include="Entity_Server0905\GetSmsCodeHistory.cs" />
+    <Compile Include="Entity_Server0905\LocalRegInfo.cs" />
+    <Compile Include="Entity_Server0905\LogDetails.cs" />
+    <Compile Include="Entity_Server0905\MockTestPaperRoleRegInfo.cs" />
+    <Compile Include="Entity_Server0905\PaperCaozuoTimuRelation.cs" />
+    <Compile Include="Entity_Server0905\PaperCaozuoTimuRelation_ProvinceUnion.cs" />
+    <Compile Include="Entity_Server0905\ProvinceUnionExamInfo.cs" />
+    <Compile Include="Entity_Server0905\ProvinceUnionExamStudentList.cs" />
+    <Compile Include="Entity_Server0905\QuestionBankInfo.cs" />
+    <Compile Include="Entity_Server0905\Questionsinfo_New.cs" />
+    <Compile Include="Entity_Server0905\Questionsinfo_New_Computer.cs" />
+    <Compile Include="Entity_Server0905\Questionsinfo_New_Computer_ProvinceUnion.cs" />
+    <Compile Include="Entity_Server0905\Questionsinfo_New_Local.cs" />
+    <Compile Include="Entity_Server0905\Questionsinfo_New_ProvinceUnion.cs" />
+    <Compile Include="Entity_Server0905\QuestionsType.cs" />
+    <Compile Include="Entity_Server0905\RenewRecord.cs" />
+    <Compile Include="Entity_Server0905\RenewRecordRelation.cs" />
+    <Compile Include="Entity_Server0905\SaveScoreResult.cs" />
+    <Compile Include="Entity_Server0905\ScoreResultDetail.cs" />
+    <Compile Include="Entity_Server0905\ScoreResultDetial_Caozuoti.cs" />
+    <Compile Include="Entity_Server0905\SDFDTable.cs" />
+    <Compile Include="Entity_Server0905\SDFDTabletest.cs" />
+    <Compile Include="Entity_Server0905\ServerMachineRegInfo.cs" />
+    <Compile Include="Entity_Server0905\ServerMachineRegInfo_bak_0810.cs" />
+    <Compile Include="Entity_Server0905\Settlement_Questions_Relation.cs" />
+    <Compile Include="Entity_Server0905\SpecialtyRegInfo.cs" />
+    <Compile Include="Entity_Server0905\SpecialtyRenewInfo.cs" />
+    <Compile Include="Entity_Server0905\SXTDFDRelation.cs" />
+    <Compile Include="Entity_Server0905\SXTTable.cs" />
+    <Compile Include="Entity_Server0905\SXTTimuTable.cs" />
+    <Compile Include="Entity_Server0905\SysMenu.cs" />
+    <Compile Include="Entity_Server0905\SysRole.cs" />
+    <Compile Include="Entity_Server0905\SysRoleMenuRelation.cs" />
+    <Compile Include="Entity_Server0905\TimuDetail.cs" />
+    <Compile Include="Entity_Server0905\TimuDetailScorePoint.cs" />
+    <Compile Include="Entity_Server0905\UserBindInfo.cs" />
+    <Compile Include="Entity_Server0905\UserTable.cs" />
+    <Compile Include="Entity_Server0905\V_QuestionsInfo.cs" />
+    <Compile Include="Entity_Server0905\WrongQuestionsInfo.cs" />
+    <Compile Include="Entity_Server0905\WrongQuestionsInfo_Computer.cs" />
+    <Compile Include="Entity_SharePaper\Base_School.cs" />
+    <Compile Include="Entity_SharePaper\Base_specialtyType.cs" />
+    <Compile Include="Entity_SharePaper\CheckStatuDictionary.cs" />
+    <Compile Include="DataContext\DbShareContext.cs" />
+    <Compile Include="Entity_SharePaper\CommentRecord.cs" />
+    <Compile Include="Entity_SharePaper\OrderRecord.cs" />
+    <Compile Include="Entity_SharePaper\OrderStatuDictionary.cs" />
+    <Compile Include="Entity_SharePaper\PaperCheckRecord.cs" />
+    <Compile Include="Entity_SharePaper\PaperInfo.cs" />
+    <Compile Include="Entity_SharePaper\PaperQuestionsRelation.cs" />
+    <Compile Include="Entity_SharePaper\PaperStatuDictionary.cs" />
+    <Compile Include="Entity_SharePaper\PayTypeDictionary.cs" />
+    <Compile Include="Entity_SharePaper\ProcessStatuDictionary.cs" />
+    <Compile Include="Entity_SharePaper\QuestionsInfo.cs" />
+    <Compile Include="Entity_SharePaper\RefundRecord.cs" />
+    <Compile Include="Entity_SharePaper\TakeRecord.cs" />
+    <Compile Include="Entity_SharePaper\UserBindInfo.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Base_courseType.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Base_courseType_Computer.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Base_knowledgepoint.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Base_knowledgepoint_Computer.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Base_Province.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Base_specialtyType.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\CaozuoSXTRelation.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\CloudExamRule.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\CreateQuestionsUsers.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ExaminationPlan.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ExaminationStudentList.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ExamPaper.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ExamPaperQuestionRelation.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ExamType.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ExerciseInfo.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ExercisePaper.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ExercisePaperQuestionRelation.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ExercisePaperRelation.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\GetSmsCodeHistory.cs" />
+    <Compile Include="DataContext\DbSystem3Context.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\PaperCaozuoTimuRelation.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\PaperCaozuoTimuRelation_Cloud.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\QuestionReviewDictionary.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\QuestionReviewDictionary3.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\QuestionsDeductRecord.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Questionsinfo.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Questionsinfo_Computer.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\QuestionsInfo_Computer_Ori.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Questionsinfo_New.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Questionsinfo_New_Computer_MockTestPaper.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Questionsinfo_New_MockTestPaper.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Questionsinfo_Ori.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Questionsinfo_Recommend.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Questionsinfo_Recommend_Review.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Questionsinfo_Recommend_Settlement.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\QuestionsReviewRecord.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\RegInfo.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ResultValueTable.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\ReviewQuestionsUsers.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Review_Questions_Relation.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\SaveScoreResult.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\SDFDTable.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Settlement_Questions_AddCut.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\Settlement_Questions_Relation.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\SXTDFDRelation.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\SXTTable.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\SXTTimuTable.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\TimuDetail.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\TimuDetailScorePoint.cs" />
+    <Compile Include="Entity_TTLXExamSystem3\UserTable.cs" />
+    <Compile Include="Entity_UserAdmin\Base_Area.cs" />
+    <Compile Include="Entity_UserAdmin\Base_courseType.cs" />
+    <Compile Include="Entity_UserAdmin\Base_courseType_Computer.cs" />
+    <Compile Include="Entity_UserAdmin\Base_courseType_Local.cs" />
+    <Compile Include="Entity_UserAdmin\Base_knowledgepoint.cs" />
+    <Compile Include="Entity_UserAdmin\Base_knowledgepoint_Computer.cs" />
+    <Compile Include="Entity_UserAdmin\Base_Province.cs" />
+    <Compile Include="Entity_UserAdmin\Base_School.cs" />
+    <Compile Include="Entity_UserAdmin\Base_specialtyType.cs" />
+    <Compile Include="Entity_UserAdmin\CloudExamRule.cs" />
+    <Compile Include="Entity_UserAdmin\CloudExamRule_Computer.cs" />
+    <Compile Include="Entity_UserAdmin\ComposeExamSchema.cs" />
+    <Compile Include="Entity_UserAdmin\ComposeExamSchemaItem.cs" />
+    <Compile Include="Entity_UserAdmin\CreateQuestionsUsers.cs" />
+    <Compile Include="Entity_UserAdmin\ExaminationPlan.cs" />
+    <Compile Include="Entity_UserAdmin\ExaminationStudentList.cs" />
+    <Compile Include="Entity_UserAdmin\ExaminationStudentList_query.cs" />
+    <Compile Include="Entity_UserAdmin\ExamPaper.cs" />
+    <Compile Include="Entity_UserAdmin\ExamPaperQuestionRelation.cs" />
+    <Compile Include="Entity_UserAdmin\ExamPaperQuestionRelation_Computer.cs" />
+    <Compile Include="Entity_UserAdmin\ExamPaperQuestionRelation_Computer_ProvinceUnion.cs" />
+    <Compile Include="Entity_UserAdmin\ExamPaperQuestionRelation_ProvinceUnion.cs" />
+    <Compile Include="Entity_UserAdmin\ExamPaper_Computer.cs" />
+    <Compile Include="Entity_UserAdmin\ExamPaper_Computer_ProvinceUnion.cs" />
+    <Compile Include="Entity_UserAdmin\ExamPaper_ProvinceUnion.cs" />
+    <Compile Include="Entity_UserAdmin\ExamType.cs" />
+    <Compile Include="Entity_UserAdmin\ExerciseInfo.cs" />
+    <Compile Include="Entity_UserAdmin\ExercisePaper.cs" />
+    <Compile Include="Entity_UserAdmin\ExercisePaperCaozuoTimuRelation.cs" />
+    <Compile Include="Entity_UserAdmin\ExercisePaperQuestionRelation.cs" />
+    <Compile Include="Entity_UserAdmin\ExercisePaperQuestionRelation_Computer.cs" />
+    <Compile Include="Entity_UserAdmin\ExercisePaperRelation.cs" />
+    <Compile Include="Entity_UserAdmin\ExercisePaperRelation_Computer.cs" />
+    <Compile Include="Entity_UserAdmin\ExercisePaper_Computer.cs" />
+    <Compile Include="Entity_UserAdmin\ExerciseScoreResult.cs" />
+    <Compile Include="Entity_UserAdmin\GetSmsCodeHistory.cs" />
+    <Compile Include="Entity_UserAdmin\LexueidRelationIDCard.cs" />
+    <Compile Include="Entity_UserAdmin\LexueidRelationIDCard0608.cs" />
+    <Compile Include="Entity_UserAdmin\LocalRegInfo.cs" />
+    <Compile Include="Entity_UserAdmin\LogDetails.cs" />
+    <Compile Include="Entity_UserAdmin\RegInfo.cs" />
+    <Compile Include="Entity_UserAdmin\ResultValueTable.cs" />
+    <Compile Include="Entity_UserAdmin\ReviewQuestionsUsers.cs" />
+    <Compile Include="Entity_UserAdmin\SaveScoreResult.cs" />
+    <Compile Include="Entity_UserAdmin\SchoolBasicInfo.cs" />
+    <Compile Include="Entity_UserAdmin\SchoolPhoneUserLimit.cs" />
+    <Compile Include="Entity_UserAdmin\ScoreResultDetail.cs" />
+    <Compile Include="Entity_UserAdmin\ScoreResultDetial_Caozuoti.cs" />
+    <Compile Include="Entity_UserAdmin\SDFDTable.cs" />
+    <Compile Include="Entity_UserAdmin\Settlement_Questions_Relation.cs" />
+    <Compile Include="Entity_UserAdmin\SXTDFDRelation.cs" />
+    <Compile Include="Entity_UserAdmin\SXTTable.cs" />
+    <Compile Include="Entity_UserAdmin\SXTTimuTable.cs" />
+    <Compile Include="Entity_UserAdmin\SysRole.cs" />
+    <Compile Include="Entity_UserAdmin\SysRoleFunc.cs" />
+    <Compile Include="Entity_UserAdmin\SysRoleFuncRelation.cs" />
+    <Compile Include="Entity_UserAdmin\UpdateUserRoidRecord.cs" />
+    <Compile Include="Entity_UserAdmin\UserTable.cs" />
+    <Compile Include="Entity_UserAdmin\UserTable_bak_0730.cs" />
+    <Compile Include="Entity_UserAdmin\UserTable_SchoolUpload.cs" />
+    <Compile Include="Entity_UserAdmin\WXSessions.cs" />
+    <Compile Include="Entity_UserAdmin\WXSessions_bak_0730.cs" />
+    <Compile Include="Entity_Users\Base_Area.cs" />
+    <Compile Include="Entity_Users\Base_courseType.cs" />
+    <Compile Include="Entity_Users\Base_courseType_Computer.cs" />
+    <Compile Include="Entity_Users\Base_Province.cs" />
+    <Compile Include="Entity_Users\Base_School.cs" />
+    <Compile Include="Entity_Users\Base_specialtyType.cs" />
+    <Compile Include="Entity_Users\ErrorQuestionReviewUser.cs" />
+    <Compile Include="Entity_Users\ErrorQuestions.cs" />
+    <Compile Include="Entity_Users\ErrorQuestionsFeedbackRecord.cs" />
+    <Compile Include="Entity_Users\ErrorQuestionsModifyRecord.cs" />
+    <Compile Include="Entity_Users\LogDetails.cs" />
+    <Compile Include="Entity_Users\ModifyQuestionAuth.cs" />
+    <Compile Include="Entity_Users\QuestionReviewMoney.cs" />
+    <Compile Include="Entity_Users\MockTestPaperAuth.cs" />
+    <Compile Include="Entity_Users\ReviewQuestionAuth.cs" />
+    <Compile Include="Entity_Users\SysDbType.cs" />
+    <Compile Include="Entity_Users\SysMenu.cs" />
+    <Compile Include="Entity_Users\SysRole.cs" />
+    <Compile Include="Entity_Users\SysRoleMenuRelation.cs" />
+    <Compile Include="Entity_Users\SysUserRoleRelation.cs" />
+    <Compile Include="Entity_Users\UserTable.cs" />
+    <Compile Include="Entity_Users\V_QuestionsReviewRecord.cs" />
+    <Compile Include="Entity_Users\V_TotalErrorQuestion.cs" />
+    <Compile Include="Entity_Users\V_TotalQuestion.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Api.Core\Api.Core.csproj">
+      <Project>{BE9E86B7-5DE7-41F9-9A18-457DF97FB1EA}</Project>
+      <Name>Api.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>
