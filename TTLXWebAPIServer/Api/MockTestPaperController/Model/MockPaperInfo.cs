@@ -51,7 +51,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController.Model
         public string Option4 { get; set; }
         public string Option5 { get; set; }
         public string ResolutionTips { get; set; }
-        public string Anwser { get; set; }
+        public string Answer { get; set; }
         public byte[] NameImg { get; set; }
         public byte[] Option0Img { get; set; }
         public byte[] Option1Img { get; set; }

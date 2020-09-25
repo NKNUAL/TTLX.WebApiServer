@@ -3,6 +3,7 @@ using Api.Core;
 using Api.Core.Logger;
 using Api.DAL.DataContext;
 using Api.DAL.Entity_MockTestPaper;
+using Api.DAL.Entity_Users;
 using Api.Queue;
 using Api.Queue.QueueModel;
 using AutoMapper;
@@ -19,6 +20,7 @@ using System.Web.Http;
 using TTLXWebAPIServer.Api.MockTestPaperController.Model;
 using TTLXWebAPIServer.Api.Model;
 using TTLXWebAPIServer.App_Start;
+using UserTable_user = Api.DAL.Entity_Users.UserTable;
 
 namespace TTLXWebAPIServer.Api.MockTestPaperController
 {
@@ -41,7 +43,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public  HttpResultModel UserLogin(LoginModel loginModel)
+        public HttpResultModel UserLogin(LoginModel loginModel)
         {
             if (loginModel == null || string.IsNullOrEmpty(loginModel.UserId)
                 || string.IsNullOrEmpty(loginModel.Password))
@@ -51,7 +53,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
 
             using (DbUsersContext dbUser = new DbUsersContext())
             {
-                var userTable =  dbUser.UserTable
+                var userTable = dbUser.UserTable
                     .FirstOrDefault(u => ((u.lexueid == loginModel.UserId && u.UserPassword == loginModel.Password)
                     || (u.KaoHao == loginModel.UserId && u.UserPassword == loginModel.Password))
                     && u.IsDelete == 0 && u.UseState == 1);
@@ -111,9 +113,21 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             if (string.IsNullOrEmpty(userId))
                 return new HttpResultModel { success = false, message = "参数异常" };
 
+            UserTable_user user = null;
+            using (DbUsersContext db = new DbUsersContext())
+            {
+                user = db.UserTable.FirstOrDefault(u => u.lexueid == userId);
+            }
+
+            if (user == null)
+                return new HttpResultModel { success = false, message = "用户不存在" };
+
             var rules = GetRulesByUserId(userId);
 
             Dictionary<string, QuestionRule> dic_rules = new Dictionary<string, QuestionRule>();
+
+            var dic_course = _baseService.GetCourseTypes(user.FK_Specialty)
+                .ToDictionary(k => k.CourseNo, v => v.CourseName);
 
             foreach (var rule in rules)
             {
@@ -128,15 +142,13 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                         RuleName = rule.RuleName
                     });
                 }
-
                 var course = dic_rules[rule.RuleNo].CourseRules.Find(c => c.No == rule.CourseNo);
                 if (course == null)
                 {
                     course = new SubRule
                     {
                         No = rule.CourseNo,
-                        Name = _baseService.GetCourseTypes(rule.SpecialtyId)
-                        .ToDictionary(k => k.CourseNo, v => v.CourseName)[rule.CourseNo],
+                        Name = dic_course[rule.CourseNo],
                         QueCount = rule.CoureseQueCount,
                         KnowRules = new List<SubRule>()
                     };
@@ -149,7 +161,6 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                     .ToDictionary(k => k.KnowNo, v => v.KnowName)[rule.KnowNo],
                     QueCount = rule.KnowQueCount
                 });
-
             }
 
             return new HttpResultModel { success = true, data = dic_rules.Values.ToList() };
@@ -249,7 +260,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
 
                         dicQues[que.FK_CourseType][que.FK_KnowledgePoint].Add(new QuestionsInfoModel
                         {
-                            Anwser = que.StandardAnwser,
+                            Answer = que.StandardAnwser,
                             NameImg = que.nameImg,
                             No = que.No,
                             Option0 = que.Option0,
@@ -293,7 +304,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
 
                         dicQues[que.FK_CourseType][que.FK_KnowledgePoint].Add(new QuestionsInfoModel
                         {
-                            Anwser = que.StandardAnwser,
+                            Answer = que.StandardAnwser,
                             NameImg = que.nameImg,
                             No = que.No,
                             Option0 = que.Option0,
