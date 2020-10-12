@@ -1,8 +1,10 @@
 ﻿using Api.BLL;
+using Api.BLL.ServiceModel;
 using Api.Core;
+using Api.Core.Enum;
 using Api.Core.Logger;
 using Api.DAL.DataContext;
-using Api.DAL.Entity_MockTestPaper;
+using Api.DAL.Entity_MockTestPaper_School;
 using Api.DAL.Entity_Users;
 using Api.Queue;
 using Api.Queue.QueueModel;
@@ -33,7 +35,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         public MockTestPaperController(IBaseService baseService) : base(baseService) { }
 
 
-        private Random _random = new Random();
+        private readonly Random _random = new Random();
 
         /// <summary>
         /// 用户登录
@@ -74,7 +76,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                     UserName = auth.UserName,
                 };
 
-                using (DbMockTestPaperContext dbMock = new DbMockTestPaperContext())
+                using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
                 {
                     var types = dbMock.QuestionsType
                         .Where(q => q.TypeSpecialty.ToString() == info.SpecialtyId
@@ -110,6 +112,8 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         [Route("get/rules/{userId}")]
         public HttpResultModel GetRules(string userId)
         {
+
+
             if (string.IsNullOrEmpty(userId))
                 return new HttpResultModel { success = false, message = "参数异常" };
 
@@ -129,6 +133,8 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             var dic_course = _baseService.GetCourseTypes(user.FK_Specialty)
                 .ToDictionary(k => k.CourseNo, v => v.CourseName);
 
+            Dictionary<string, Dictionary<string, string>> dic_know = new Dictionary<string, Dictionary<string, string>>();
+
             foreach (var rule in rules)
             {
                 if (!dic_rules.ContainsKey(rule.RuleNo))
@@ -137,35 +143,207 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                     {
                         RuleNo = rule.RuleNo,
                         SpecialtyId = rule.SpecialtyId,
-                        CourseRules = new List<SubRule>(),
+                        CourseRules = new List<CourseRule>(),
                         RuleDesc = rule.RuleDesc,
-                        RuleName = rule.RuleName
+                        RuleName = rule.RuleName,
                     });
                 }
-                var course = dic_rules[rule.RuleNo].CourseRules.Find(c => c.No == rule.CourseNo);
+
+                var course = dic_rules[rule.RuleNo].CourseRules.Find(c => c.CourseNo == rule.CourseNo);
                 if (course == null)
                 {
-                    course = new SubRule
+                    course = new CourseRule
                     {
-                        No = rule.CourseNo,
-                        Name = dic_course[rule.CourseNo],
-                        QueCount = rule.CoureseQueCount,
-                        KnowRules = new List<SubRule>()
+                        CourseNo = rule.CourseNo,
+                        CourseName = dic_course[rule.CourseNo],
+                        DanxuanCount = rule.Courese_DanxuanCount,
+                        DuoxuanCount = rule.Courese_DuoxuanCount,
+                        PanduanCount = rule.Courese_PanduanCount,
+                        QueCount = rule.Courese_QueCount,
+                        KnowRules = new List<KnowRule>()
                     };
                     dic_rules[rule.RuleNo].CourseRules.Add(course);
                 }
-                course.KnowRules.Add(new SubRule
+
+                if (!dic_know.ContainsKey(rule.CourseNo))
                 {
-                    No = rule.KnowNo,
-                    Name = _baseService.GetKnowTypes(rule.SpecialtyId, rule.CourseNo)
-                    .ToDictionary(k => k.KnowNo, v => v.KnowName)[rule.KnowNo],
-                    QueCount = rule.KnowQueCount
-                });
+                    dic_know.Add(rule.CourseNo,
+                        _baseService.GetKnowTypes(rule.SpecialtyId, rule.CourseNo)
+                        .ToDictionary(k => k.KnowNo, v => v.KnowName));
+                }
+
+                if (!string.IsNullOrEmpty(rule.KnowNo))
+                {
+                    course.KnowRules.Add(new KnowRule
+                    {
+                        KnowNo = rule.KnowNo,
+                        KnowName = dic_know[rule.CourseNo][rule.KnowNo],
+                        DanxuanCount = rule.Know_DanxuanCount,
+                        DuoxuanCount = rule.Know_DuoxuanCount,
+                        PanduanCount = rule.Know_DuoxuanCount
+                    });
+                }
             }
 
             return new HttpResultModel { success = true, data = dic_rules.Values.ToList() };
 
         }
+
+        /// <summary>
+        /// 删除规则
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="ruleNo"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("del/rule/{userId}/{ruleNo}")]
+        public HttpResultModel DelRule(string userId, string ruleNo)
+        {
+
+
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+            {
+
+                if (dbMock.UserQuestionMockTestPaper.Count(q => q.RuleNo == ruleNo) > 0)
+                    return new HttpResultModel { success = false, message = "规则正在被模拟试卷使用，无法删除！" };
+
+                var rule = dbMock.UserQuestionRules.FirstOrDefault(r => r.RuleNo == ruleNo);
+
+                if (rule == null)
+                    return new HttpResultModel { success = false, message = "规则不存在" };
+
+                if (rule.UserId != userId)
+                    return new HttpResultModel { success = false, message = "无权限删除" };
+
+                using (var tran = dbMock.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        string sql = "delete from UserQuestionRules_Know_Relation " +
+                            "where CourseRuleNo in " +
+                            $"(select CourseRuleNo from UserQuestionRules_Course_Relation where RuleNo='{rule.RuleNo}')";
+                        dbMock.Database.ExecuteSqlCommand(sql);
+                        sql = $"delete from UserQuestionRules_Course_Relation where RuleNo='{rule.RuleNo}'";
+                        dbMock.Database.ExecuteSqlCommand(sql);
+
+                        dbMock.UserQuestionRules.Remove(rule);
+
+                        dbMock.SaveChanges();
+
+                        tran.Commit();
+
+                        return new HttpResultModel { success = true };
+                    }
+                    catch (Exception ex)
+                    {
+                        LogContent.Instance.WriteLog(new AppOpLog
+                        {
+                            LogMessage = "删除规则出错：" + ex.Message,
+                            MemberID = userId,
+                            MethodName = ""
+                        }, Log4NetLevel.Error);
+
+                        tran.Rollback();
+
+                        return new HttpResultModel { success = false, message = "删除出错：" + ex.Message };
+                    }
+                }
+
+
+            }
+        }
+
+        /// <summary>
+        /// 修改规则
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="editModel"></param>
+        /// <returns></returns>
+        //[HttpPost]
+        //[Route("edit/rule/{userId}")]
+        //public async Task<HttpResultModel> EditRuleAsync(string userId, QuestionRule updateRule)
+        //{
+        //    if (string.IsNullOrEmpty(userId))
+        //        return new HttpResultModel { success = false, message = "参数异常" };
+
+        //    using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+        //    {
+        //        if (dbMock.UserQuestionMockTestPaper.Count(q => q.RuleNo == updateRule.RuleNo) > 0)
+        //            return new HttpResultModel { success = false, message = "规则正在被模拟试卷使用，无法修改！" };
+
+        //        var rule = dbMock.UserQuestionRules.FirstOrDefault(r => r.RuleNo == updateRule.RuleNo);
+
+        //        if (rule == null)
+        //            return new HttpResultModel { success = false, message = "规则不存在" };
+
+        //        if (rule.UserId != userId)
+        //            return new HttpResultModel { success = false, message = "无权限修改" };
+
+        //        using (var tran = dbMock.Database.BeginTransaction())
+        //        {
+        //            try
+        //            {
+
+        //                rule.RuleName = updateRule.RuleName;
+        //                rule.RuleDesc = updateRule.RuleDesc;
+        //                rule.QueCount = updateRule.CourseRules.Sum(c => c.QueCount);
+        //                await dbMock.SaveChangesAsync();
+
+        //                string sql = "delete from UserQuestionRules_Know_Relation " +
+        //                    "where CourseRuleNo in " +
+        //                    $"(select CourseRuleNo from UserQuestionRules_Course_Relation where RuleNo='{rule.RuleNo}')";
+        //                await dbMock.Database.ExecuteSqlCommandAsync(sql);
+        //                sql = $"delete from UserQuestionRules_Course_Relation where RuleNo='{rule.RuleNo}'";
+        //                await dbMock.Database.ExecuteSqlCommandAsync(sql);
+
+        //                foreach (var course in updateRule.CourseRules)
+        //                {
+        //                    string courseRuleNo = DateTime.Now.ToString("yyyyMMddHHmmss") + _random.Next(1000, 9999);
+
+        //                    dbMock.UserQuestionRules_Course_Relation.Add(new UserQuestionRules_Course_Relation
+        //                    {
+        //                        CourseNo = course.CourseNo,
+        //                        DanxuanCount = course.QueCount,
+        //                        RuleNo = rule.RuleNo,
+        //                        CourseRuleNo = courseRuleNo,
+        //                    });
+
+        //                    foreach (var know in course.KnowRules)
+        //                    {
+        //                        dbMock.UserQuestionRules_Know_Relation.Add(new UserQuestionRules_Know_Relation
+        //                        {
+        //                            CourseRuleNo = courseRuleNo,
+        //                            KnowNo = know.No,
+        //                            QueCount = know.QueCount
+        //                        });
+        //                    }
+
+        //                    await dbMock.SaveChangesAsync();
+        //                }
+
+
+        //                tran.Commit();
+
+        //                return new HttpResultModel { success = true };
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                LogContent.Instance.WriteLog(new AppOpLog
+        //                {
+        //                    LogMessage = "修改规则出错：" + ex.Message,
+        //                    MemberID = userId,
+        //                    MethodName = ""
+        //                }, Log4NetLevel.Error);
+
+        //                tran.Rollback();
+
+        //                return new HttpResultModel { success = false, message = ex.Message };
+        //            }
+        //        }
+
+
+        //    }
+        //}
 
         /// <summary>
         /// 获取用户模拟试卷
@@ -179,7 +357,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             if (string.IsNullOrEmpty(userId))
                 return new HttpResultModel { success = false, message = "参数异常" };
 
-            using (DbMockTestPaperContext dbMock = new DbMockTestPaperContext())
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
 
                 var query = (from a in dbMock.UserQuestionMockTestPaper
@@ -230,7 +408,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             Dictionary<string, Dictionary<string, List<QuestionsInfoModel>>> dicQues =
                     new Dictionary<string, Dictionary<string, List<QuestionsInfoModel>>>();
 
-            using (DbMockTestPaperContext dbMock = new DbMockTestPaperContext())
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
 
                 paper = dbMock.UserQuestionMockTestPaper
@@ -374,7 +552,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             if (rule == null)
                 return new HttpResultModel { success = false, message = "规则信息为空" };
 
-            using (DbMockTestPaperContext dbMock = new DbMockTestPaperContext())
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
                 using (var tran = dbMock.Database.BeginTransaction())
                 {
@@ -387,7 +565,10 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                         dbMock.UserQuestionRules.Add(new UserQuestionRules
                         {
                             SpecialtyId = rule.SpecialtyId,
-                            QueCount = rule.CourseRules.Sum(c => c.QueCount),
+                            TotalCount = rule.CourseRules.Sum(c => c.QueCount),
+                            DanxuanCount = rule.CourseRules.Sum(c => c.DanxuanCount),
+                            DuoxuanCount = rule.CourseRules.Sum(c => c.DuoxuanCount),
+                            PanduanCount = rule.CourseRules.Sum(c => c.PanduanCount),
                             RuleDesc = rule.RuleDesc,
                             RuleName = rule.RuleName,
                             RuleNo = ruleNo,
@@ -402,19 +583,27 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
 
                             dbMock.UserQuestionRules_Course_Relation.Add(new UserQuestionRules_Course_Relation
                             {
-                                CourseNo = course.No,
-                                QueCount = course.QueCount,
+                                CourseNo = course.CourseNo,
+                                DanxuanCount = course.DanxuanCount,
+                                DuoxuanCount = course.DuoxuanCount,
+                                PanduanCount = course.PanduanCount,
+                                TotalCount = course.QueCount,
                                 RuleNo = ruleNo,
                                 CourseRuleNo = courseRuleNo,
                             });
+
+                            if (course.KnowRules == null)
+                                continue;
 
                             foreach (var know in course.KnowRules)
                             {
                                 dbMock.UserQuestionRules_Know_Relation.Add(new UserQuestionRules_Know_Relation
                                 {
                                     CourseRuleNo = courseRuleNo,
-                                    KnowNo = know.No,
-                                    QueCount = know.QueCount
+                                    KnowNo = know.KnowNo,
+                                    DanxuanCount = know.DanxuanCount,
+                                    DuoxuanCount = know.DuoxuanCount,
+                                    PanduanCount = know.PanduanCount
                                 });
                             }
 
@@ -447,40 +636,111 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         /// <param name="userId"></param>
         /// <param name="put"></param>
         /// <returns></returns>
-        [HttpPut]
-        [Route("put/paper")]
-        public HttpResultModel PutPaper(PutQuestionModel put)
+        //[HttpPut]
+        //[Route("put/paper")]
+        //public HttpResultModel PutPaper(PutQuestionModel put)
+        //{
+        //    if (put == null)
+        //        return new HttpResultModel { success = false, message = "题目为空" };
+
+        //    var ruleItems = GetRulesByRuleNo(put.UserId, put.RuleNo);
+
+        //    if (ruleItems.Count == 0)
+        //        return new HttpResultModel { success = false, message = "不存在此规则" };
+
+        //    Dictionary<string, PutQuestionCourseModel> dicCourse = new Dictionary<string, PutQuestionCourseModel>();
+
+        //    foreach (var item in ruleItems)
+        //    {
+        //        if (!dicCourse.ContainsKey(item.CourseNo))
+        //            dicCourse.Add(item.CourseNo, put.Courses.Find(s => s.CourseNo == item.CourseNo));
+
+        //        var course = dicCourse[item.CourseNo];
+        //        if (course == null)
+        //            return new HttpResultModel { success = false, message = "请按照出题规则出题" };
+        //        var know = course.Knows.Find(s => s.KnowNo == item.KnowNo);
+        //        if (know == null)
+        //            return new HttpResultModel { success = false, message = "请按照出题规则出题" };
+        //        if (know.Questions == null || know.Questions.Count != item.KnowQueCount)
+        //            return new HttpResultModel { success = false, message = "请按照出题规则出题" };
+        //    }
+
+        //    var uploadModel = Mapper.Map<MockTestPaperQueueModel>(put);
+        //    GlabolDataExe.Instance.AddData(QueueDataType.MockTestPaper, uploadModel);
+
+        //    return new HttpResultModel { success = true };
+
+        //}
+
+        /// <summary>
+        /// 修改题目内容
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("edit/question/{specialtyId}")]
+        public HttpResultModel EditPaper(string specialtyId, QuestionsInfoModel que)
         {
-            if (put == null)
-                return new HttpResultModel { success = false, message = "题目为空" };
+            if (string.IsNullOrEmpty(specialtyId) || que is null)
+                return new HttpResultModel { success = false, message = "参数异常" };
 
-            var ruleItems = GetRulesByRuleNo(put.UserId, put.RuleNo);
-
-            if (ruleItems.Count == 0)
-                return new HttpResultModel { success = false, message = "不存在此规则" };
-
-            Dictionary<string, PutQuestionCourseModel> dicCourse = new Dictionary<string, PutQuestionCourseModel>();
-
-            foreach (var item in ruleItems)
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
-                if (!dicCourse.ContainsKey(item.CourseNo))
-                    dicCourse.Add(item.CourseNo, put.Courses.Find(s => s.CourseNo == item.CourseNo));
+                if (specialtyId == "0")
+                {
+                    var que_query = dbMock.Questionsinfo_New_Computer
+                        .FirstOrDefault(q => q.sourcedoc == "UserQuestionMockPaper" && q.No == que.No);
 
-                var course = dicCourse[item.CourseNo];
-                if (course == null)
-                    return new HttpResultModel { success = false, message = "请按照出题规则出题" };
-                var know = course.Knows.Find(s => s.KnowNo == item.KnowNo);
-                if (know == null)
-                    return new HttpResultModel { success = false, message = "请按照出题规则出题" };
-                if (know.Questions == null || know.Questions.Count != item.KnowQueCount)
-                    return new HttpResultModel { success = false, message = "请按照出题规则出题" };
+                    if (que_query == null)
+                    {
+                        return new HttpResultModel { success = false, message = "试题不存在" };
+                    }
+
+                    que_query.Name = que.QueContent;
+                    que_query.nameImg = que.NameImg;
+                    que_query.Option0 = que.Option0;
+                    que_query.option0Img = que.Option0Img;
+                    que_query.Option1 = que.Option1;
+                    que_query.option1Img = que.Option1Img;
+                    que_query.Option2 = que.Option2;
+                    que_query.option2Img = que.Option2Img;
+                    que_query.Option3 = que.Option3;
+                    que_query.option3Img = que.Option3Img;
+                    que_query.StandardAnwser = que.Answer;
+                    que_query.ResolutionTips = que.ResolutionTips;
+                    que_query.Type = que.QueType;
+                    que_query.DifficultLevel = que.DifficultLevel;
+
+                    dbMock.SaveChanges();
+                }
+                else
+                {
+                    var que_query = dbMock.Questionsinfo_New
+                            .FirstOrDefault(q => q.sourcedoc == "UserQuestionMockPaper" && q.No == que.No);
+
+                    if (que_query == null)
+                    {
+                        return new HttpResultModel { success = false, message = "试题不存在" };
+                    }
+
+                    que_query.Name = que.QueContent;
+                    que_query.nameImg = que.NameImg;
+                    que_query.Option0 = que.Option0;
+                    que_query.option0Img = que.Option0Img;
+                    que_query.Option1 = que.Option1;
+                    que_query.option1Img = que.Option1Img;
+                    que_query.Option2 = que.Option2;
+                    que_query.option2Img = que.Option2Img;
+                    que_query.Option3 = que.Option3;
+                    que_query.option3Img = que.Option3Img;
+                    que_query.StandardAnwser = que.Answer;
+                    que_query.ResolutionTips = que.ResolutionTips;
+                    que_query.Type = que.QueType;
+                    que_query.DifficultLevel = que.DifficultLevel;
+
+                    dbMock.SaveChanges();
+                }
             }
-
-            var uploadModel = Mapper.Map<MockTestPaperQueueModel>(put);
-            GlabolDataExe.Instance.AddData(QueueDataType.MockTestPaper, uploadModel);
-
             return new HttpResultModel { success = true };
-
         }
 
         /// <summary>
@@ -525,6 +785,129 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             return new HttpResultModel { success = true, data = models };
         }
 
+        /// <summary>
+        /// 检查题目相似度
+        /// </summary>
+        /// <param name="checkModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("get/similarity")]
+        public HttpResultModel GetQuestionSimilarity(QuestionCheckModel checkModel)
+        {
+            if (checkModel == null
+                || string.IsNullOrWhiteSpace(checkModel.SpecialtyId))
+                return new HttpResultModel { success = false, message = "参数异常" };
+
+            //代表题目选项为图片，无法对比
+            if (string.IsNullOrWhiteSpace(checkModel.SpecialtyId)
+                || string.IsNullOrWhiteSpace(checkModel.SpecialtyId)
+                || string.IsNullOrWhiteSpace(checkModel.SpecialtyId)
+                || string.IsNullOrWhiteSpace(checkModel.SpecialtyId))
+            {
+                return new HttpResultModel { success = true };
+            }
+
+            ParallelQuery<TotalQuestionsView> sourceQueQuery;
+            using (DbShareContext dbShare = new DbShareContext())
+            {
+                sourceQueQuery = dbShare.Database
+                            .SqlQuery<TotalQuestionsView>($"select QueContent from TotalQuestions_{checkModel.SpecialtyId}")
+                            .AsParallel();
+
+                double Similarity = 0.9;
+
+                List<string> ques = new List<string>();
+
+                Parallel.ForEach(sourceQueQuery, (q, loopState) =>
+                {
+                    if (LevenshteinDistanceHelper.CompareStrings(q.QueContent, checkModel.QueContent) >= Similarity)
+                    {
+                        if (LevenshteinDistanceHelper.CompareStrings(q.OptionA, checkModel.OptionA) >= Similarity
+                        || LevenshteinDistanceHelper.CompareStrings(q.OptionB, checkModel.OptionB) >= Similarity
+                        || LevenshteinDistanceHelper.CompareStrings(q.OptionC, checkModel.OptionC) >= Similarity
+                        || LevenshteinDistanceHelper.CompareStrings(q.OptionD, checkModel.OptionD) >= Similarity)
+                        {
+                            ques.Add(q.QueContent);
+                            loopState.Stop();
+                        }
+                    }
+                });
+
+                return new HttpResultModel { success = true, data = ques.Count > 0 ? ques[0] : null };
+            }
+
+
+        }
+
+        /// <summary>
+        /// 获取基础规则
+        /// </summary>
+        /// <param name="specialtyId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("get/baserule/{specialtyId}")]
+        public HttpResultModel GetBaseRule(int specialtyId)
+        {
+
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+            {
+                var baseRule = dbMock.SpecialtyBaseRules.FirstOrDefault(s => s.SpecialtyId == specialtyId);
+
+                if (baseRule == null)
+                    return new HttpResultModel { success = false, message = "数据异常，请联系管理员" };
+
+
+                var rule = new BaseRule
+                {
+                    SpecialtyId = specialtyId,
+                    DanxuanCount = baseRule.DanxuanCount,
+                    DuoxuanCount = baseRule.DuoxuanCount,
+                    PanduanCount = baseRule.PanduanCount,
+                    CourseRules = new List<CourseBaseRule>()
+                };
+
+                if (specialtyId == 0)
+                {
+                    var cloud = dbMock.CloudExamRule_Computer.Where(c => c.ExamSpecialtyID == specialtyId);
+
+                    cloud.ForEach(c =>
+                    {
+                        rule.CourseRules.Add(new CourseBaseRule
+                        {
+                            CourseNo = c.ExamCourseID.ToString(),
+                            DanxuanCount = c.moduleNumDanxuan ?? 0,
+                            DuoxuanCount = c.moduleNumDuoxuan ?? 0,
+                            PanduanCount = c.moduleNumPanduan ?? 0
+                        });
+                    });
+                }
+                else
+                {
+                    var cloud = dbMock.CloudExamRule.Where(c => c.ExamSpecialtyID == specialtyId);
+
+                    cloud.ForEach(c =>
+                    {
+                        rule.CourseRules.Add(new CourseBaseRule
+                        {
+                            CourseNo = c.ExamCourseID.ToString(),
+                            DanxuanCount = c.moduleNumDanxuan ?? 0,
+                            DuoxuanCount = c.moduleNumDuoxuan ?? 0,
+                            PanduanCount = c.moduleNumPanduan ?? 0
+                        });
+                    });
+                }
+
+
+
+                return new HttpResultModel
+                {
+                    success = true,
+                    data = rule
+                };
+
+            }
+
+        }
 
 
         /// <summary>
@@ -534,7 +917,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         /// <returns></returns>
         private List<RuleModel> GetRulesByUserId(string userId)
         {
-            using (DbMockTestPaperContext dbMock = new DbMockTestPaperContext())
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
                 return (from a in dbMock.UserQuestionRules
                         join b in dbMock.UserQuestionRules_Course_Relation on a.RuleNo equals b.RuleNo
@@ -548,9 +931,14 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                             RuleDesc = a.RuleDesc,
                             SpecialtyId = a.SpecialtyId,
                             CourseNo = b.CourseNo,
-                            CoureseQueCount = b.QueCount,
+                            Courese_DanxuanCount = b.DanxuanCount,
+                            Courese_DuoxuanCount = b.DuoxuanCount,
+                            Courese_PanduanCount = b.PanduanCount,
+                            Courese_QueCount = b.TotalCount,
                             KnowNo = c.KnowNo,
-                            KnowQueCount = c.QueCount
+                            Know_DanxuanCount = c.DanxuanCount,
+                            Know_DuoxuanCount = c.DuoxuanCount,
+                            Know_PanduanCount = c.PanduanCount
                         }).ToList();
             }
         }
@@ -562,7 +950,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         /// <returns></returns>
         private List<RuleModel> GetRulesByRuleNo(string userId, string ruleNo)
         {
-            using (DbMockTestPaperContext dbMock = new DbMockTestPaperContext())
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
                 return (from a in dbMock.UserQuestionRules
                         join b in dbMock.UserQuestionRules_Course_Relation on a.RuleNo equals b.RuleNo
@@ -576,9 +964,14 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                             RuleDesc = a.RuleDesc,
                             SpecialtyId = a.SpecialtyId,
                             CourseNo = b.CourseNo,
-                            CoureseQueCount = b.QueCount,
+                            Courese_DanxuanCount = b.DanxuanCount,
+                            Courese_DuoxuanCount = b.DuoxuanCount,
+                            Courese_PanduanCount = b.PanduanCount,
+                            Courese_QueCount = b.TotalCount,
                             KnowNo = c.KnowNo,
-                            KnowQueCount = c.QueCount
+                            Know_DanxuanCount = c.DanxuanCount,
+                            Know_DuoxuanCount = c.DuoxuanCount,
+                            Know_PanduanCount = c.PanduanCount
                         }).ToList();
             }
         }

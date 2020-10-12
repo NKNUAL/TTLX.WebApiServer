@@ -1,0 +1,12 @@
+2020-10-10 16:47:41:进去GetRules
+2020-10-10 16:51:15:进去GetRules
+2020-10-10 16:51:40:进去GetRules
+2020-10-10 16:52:03:进去GetRules
+2020-10-10 16:53:29:进去GetRules
+2020-10-10 16:53:57:模式试卷队列中当前剩余数量：1
+2020-10-10 16:53:57:{"RuleNo":"202010101651393623","UserId":"lk","UserName":"兰坤","PaperName":"e","Courses":[{"CourseNo":"2","Knows":[{"KnowNo":"10","Questions":[{"No":"5b150908e7c84f1b93791719a0ad3063","QueContent":"ces","QueType":1,"Option0":"ces","Option1":"ces","Option2":"1","Option3":"1","Option4":null,"Option5":null,"ResolutionTips":"11","Answer":"A","NameImg":"","Option0Img":"","Option1Img":"","Option2Img":"","Option3Img":"","Option4Img":"","Option5Img":"","DifficultLevel":1}]},{"KnowNo":"7","Questions":[{"No":"7b75884474a349f6b554921ed6851e0a","QueContent":"2dwqd","QueType":1,"Option0":"dwd","Option1":"dwdw","Option2":"dqd","Option3":"dq","Option4":null,"Option5":null,"ResolutionTips":"qdq","Answer":"A","NameImg":"","Option0Img":"","Option1Img":"","Option2Img":"","Option3Img":"","Option4Img":"","Option5Img":"","DifficultLevel":2}]},{"KnowNo":"9","Questions":[{"No":"07255cbb91b548b38f92d903f846f677","QueContent":"dwdwdw","QueType":1,"Option0":"dw","Option1":"dw","Option2":"dw","Option3":"dw","Option4":null,"Option5":null,"ResolutionTips":"dwdw","Answer":"A","NameImg":"","Option0Img":"","Option1Img":"","Option2Img":"","Option3Img":"","Option4Img":"","Option5Img":"","DifficultLevel":2}]}]}]}
+2020-10-10 17:01:35:进去GetRules
+2020-10-10 17:02:24:模式试卷队列中当前剩余数量：1
+2020-10-10 17:04:03:进去GetRules
+2020-10-10 17:04:59:模式试卷队列中当前剩余数量：1
+2020-10-10 17:06:01:进去GetRules

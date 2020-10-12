@@ -35,12 +35,17 @@ namespace TTLXWebAPIServer
                             " select QueContent,OptionA,OptionB,OptionC,OptionD" +
                             " from [TTLXExamSystem3].[dbo].[Questionsinfo_Recommend]" +
                             $" where FK_Specialty='{specialty.No}'" +
-                            " union" +
+                            " union " +
                             "(select c.QueContent,c.Option0 OptionA,c.Option1 OptionB,c.Option2 OptionC,c.Option3 OptionD" +
                             " from PaperInfo a" +
                             " left join PaperQuestionsRelation b on a.PaperID = b.PaperID" +
                             " left join QuestionsInfo c on b.QueNo = c.No" +
-                            $" where a.PaperSpecialtyId = '{specialty.No}' and a.CheckStatu=1)";
+                            $" where a.PaperSpecialtyId = '{specialty.No}' and a.CheckStatu=1)" +
+                            $" union " +
+                            $"SELECT Name QueContent,Option0 OptionA,Option1 OptionB,Option2 OptionC,Option3 OptionD FROM " +
+                            $"[TTLXExamSystem3_MockTestPaper].[dbo]." +
+                            (specialty.No == "0" ? "[Questionsinfo_New_Computer]" : "[Questionsinfo_New]") +
+                            $"where sourcedoc='MockTestPaper'";
 
                         dbShare.Database.ExecuteSqlCommand(create_sql);
                     }

@@ -21,46 +21,46 @@
       <publishTime>08/27/2020 15:15:34</publishTime>
     </File>
     <File Include="bin/Api.BLL.dll">
-      <publishTime>09/17/2020 10:24:22</publishTime>
+      <publishTime>10/10/2020 17:06:22</publishTime>
     </File>
     <File Include="bin/Api.BLL.dll.config">
       <publishTime>08/27/2020 15:15:31</publishTime>
     </File>
     <File Include="bin/Api.BLL.pdb">
-      <publishTime>09/17/2020 10:24:22</publishTime>
+      <publishTime>10/10/2020 17:06:22</publishTime>
     </File>
     <File Include="bin/Api.Core.dll">
-      <publishTime>09/17/2020 10:24:20</publishTime>
+      <publishTime>10/10/2020 17:06:20</publishTime>
     </File>
     <File Include="bin/Api.Core.dll.config">
       <publishTime>08/27/2020 15:15:31</publishTime>
     </File>
     <File Include="bin/Api.Core.pdb">
-      <publishTime>09/17/2020 10:24:20</publishTime>
+      <publishTime>10/10/2020 17:06:20</publishTime>
     </File>
     <File Include="bin/Api.DAL.dll">
-      <publishTime>09/17/2020 10:24:21</publishTime>
+      <publishTime>10/10/2020 17:06:21</publishTime>
     </File>
     <File Include="bin/Api.DAL.dll.config">
-      <publishTime>08/27/2020 15:15:31</publishTime>
+      <publishTime>09/23/2020 10:13:31</publishTime>
     </File>
     <File Include="bin/Api.DAL.pdb">
-      <publishTime>09/17/2020 10:24:21</publishTime>
+      <publishTime>10/10/2020 17:06:21</publishTime>
     </File>
     <File Include="bin/Api.License.dll">
-      <publishTime>09/17/2020 10:24:21</publishTime>
+      <publishTime>10/10/2020 17:06:22</publishTime>
     </File>
     <File Include="bin/Api.License.pdb">
-      <publishTime>09/17/2020 10:24:21</publishTime>
+      <publishTime>10/10/2020 17:06:22</publishTime>
     </File>
     <File Include="bin/Api.Queue.dll">
-      <publishTime>09/17/2020 10:24:21</publishTime>
+      <publishTime>10/10/2020 17:06:22</publishTime>
     </File>
     <File Include="bin/Api.Queue.dll.config">
       <publishTime>08/27/2020 15:15:33</publishTime>
     </File>
     <File Include="bin/Api.Queue.pdb">
-      <publishTime>09/17/2020 10:24:21</publishTime>
+      <publishTime>10/10/2020 17:06:22</publishTime>
     </File>
     <File Include="bin/Autofac.dll">
       <publishTime>08/27/2020 15:15:35</publishTime>
@@ -594,10 +594,10 @@
       <publishTime>09/17/2020 10:23:02</publishTime>
     </File>
     <File Include="bin/TTLXWebAPIServer.dll">
-      <publishTime>09/17/2020 10:24:23</publishTime>
+      <publishTime>10/10/2020 17:06:23</publishTime>
     </File>
     <File Include="bin/TTLXWebAPIServer.pdb">
-      <publishTime>09/17/2020 10:24:23</publishTime>
+      <publishTime>10/10/2020 17:06:23</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>08/27/2020 15:16:02</publishTime>
@@ -644,11 +644,17 @@
     <File Include="pfx/ttlxexam.pfx">
       <publishTime>10/15/2020 16:41:49</publishTime>
     </File>
+    <File Include="ProductPackage/TTLX.MockTestPaper_V2/TTLX.MockTestPaper_V2_2.0.0.0.zip">
+      <publishTime>10/10/2020 15:48:34</publishTime>
+    </File>
+    <File Include="product_version.json">
+      <publishTime>10/10/2020 15:50:23</publishTime>
+    </File>
     <File Include="View/Index.html">
       <publishTime>08/27/2020 15:15:34</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/17/2020 10:07:28</publishTime>
+      <publishTime>10/10/2020 17:06:23</publishTime>
     </File>
   </ItemGroup>
 </Project>

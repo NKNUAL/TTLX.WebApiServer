@@ -11,14 +11,26 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController.Model
         public string RuleName { get; set; }
         public string RuleDesc { get; set; }
         public string SpecialtyId { get; set; }
-        public List<SubRule> CourseRules { get; set; }
+        public List<CourseRule> CourseRules { get; set; }
     }
 
-    public class SubRule
+    public class CourseRule
     {
-        public string No { get; set; }
-        public string Name { get; set; }
+        public string CourseNo { get; set; }
+        public string CourseName { get; set; }
         public int QueCount { get; set; }
-        public List<SubRule> KnowRules { get; set; }
+        public int DanxuanCount { get; set; }
+        public int DuoxuanCount { get; set; }
+        public int PanduanCount { get; set; }
+        public List<KnowRule> KnowRules { get; set; }
+    }
+
+    public class KnowRule
+    {
+        public string KnowNo { get; set; }
+        public string KnowName { get; set; }
+        public int? DanxuanCount { get; set; }
+        public int? DuoxuanCount { get; set; }
+        public int? PanduanCount { get; set; }
     }
 }

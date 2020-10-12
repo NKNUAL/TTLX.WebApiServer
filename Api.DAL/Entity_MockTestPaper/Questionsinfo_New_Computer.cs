@@ -9,7 +9,7 @@ namespace Api.DAL.Entity_MockTestPaper
     public partial class Questionsinfo_New_Computer
     {
         [Key]
-        [Column(Order = 0)]
+        [Column(Order = 0), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
 
         [Key]

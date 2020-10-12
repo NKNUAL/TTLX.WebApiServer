@@ -12,8 +12,13 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController.Model
         public string RuleDesc { get; set; }
         public string SpecialtyId { get; set; }
         public string CourseNo { get; set; }
-        public int CoureseQueCount { get; set; }
+        public int Courese_DanxuanCount { get; set; }
+        public int Courese_DuoxuanCount { get; set; }
+        public int Courese_PanduanCount { get; set; }
+        public int Courese_QueCount { get; set; }
         public string KnowNo { get; set; }
-        public int KnowQueCount { get; set; }
+        public int? Know_DanxuanCount { get; set; }
+        public int? Know_DuoxuanCount { get; set; }
+        public int? Know_PanduanCount { get; set; }
     }
 }

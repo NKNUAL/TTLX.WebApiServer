@@ -1,7 +1,6 @@
 ﻿using Api.Core.Logger;
 using Api.Core.Redis;
 using Api.DAL.DataContext;
-using Api.DAL.Entity_MockTestPaper;
 using Api.Queue.QueueModel;
 using System;
 using System.Collections.Concurrent;
@@ -11,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Api.Core.Extensions;
 using System.Data.Entity;
+using Api.DAL.Entity_MockTestPaper_School;
 
 namespace Api.Queue.Impl
 {
@@ -31,7 +31,7 @@ namespace Api.Queue.Impl
 
         Random _random = new Random();
 
-        public void ToDb()
+        public async void ToDb()
         {
             if (!_isEnd)
                 return;
@@ -42,7 +42,7 @@ namespace Api.Queue.Impl
             bool hasData = _queue.TryDequeue(out var data);
             if (hasData)
             {
-                using (DbMockTestPaperContext db = new DbMockTestPaperContext())
+                using (DbMockTestPaperSchoolContext db = new DbMockTestPaperSchoolContext())
                 {
                     while (hasData)
                     {
@@ -114,12 +114,14 @@ namespace Api.Queue.Impl
                                 };
 
                                 db.UserQuestionMockTestPaper.Add(mock_paper);
-                                db.SaveChangesAsync();
+                                await db.SaveChangesAsync();
 
-                                Dictionary<int, int> orderIndex = new Dictionary<int, int>();
-                                orderIndex.Add(1, 1);
-                                orderIndex.Add(2, 1);
-                                orderIndex.Add(3, 1);
+                                Dictionary<int, int> orderIndex = new Dictionary<int, int>
+                                {
+                                    { 1, 1 },
+                                    { 2, 1 },
+                                    { 3, 1 }
+                                };
 
                                 foreach (var course in data.Courses)
                                 {
@@ -138,39 +140,39 @@ namespace Api.Queue.Impl
                                                 db.Questionsinfo_New_Computer.Add(new Questionsinfo_New_Computer
                                                 {
                                                     sourcedoc = "UserQuestionMockPaper",
-                                                    StandardAnwser = que.Anwser,
+                                                    StandardAnwser = que.Answer,
                                                     FK_SpecialtyType = rule.SpecialtyId,
                                                     CreateTime = mock_paper.ExamPaperCreateTime,
                                                     CreateUserName = data.UserName,
-                                                    DifficultLevel = 1,
+                                                    DifficultLevel = que.DifficultLevel,
                                                     FK_CourseType = course.CourseNo,
                                                     FK_KnowledgePoint = know.KnowNo,
                                                     IsDelete = 0,
                                                     Name = que.QueContent,
-                                                    nameImg = que.NameImg,
+                                                    nameImg = (que.NameImg == null || que.NameImg.Length == 0 ? null : que.NameImg),
                                                     Option0 = que.Option0,
-                                                    option0Img = que.Option0Img,
+                                                    option0Img = (que.Option0Img == null || que.Option0Img.Length == 0 ? null : que.Option0Img),
                                                     Option1 = que.Option1,
-                                                    option1Img = que.Option1Img,
+                                                    option1Img = (que.Option1Img == null || que.Option1Img.Length == 0 ? null : que.Option1Img),
                                                     Option2 = que.Option2,
-                                                    option2Img = que.Option2Img,
+                                                    option2Img = (que.Option2Img == null || que.Option2Img.Length == 0 ? null : que.Option2Img),
                                                     Option3 = que.Option3,
-                                                    option3Img = que.Option3Img,
+                                                    option3Img = (que.Option3Img == null || que.Option3Img.Length == 0 ? null : que.Option3Img),
                                                     Option4 = que.Option4,
-                                                    option4Img = que.Option4Img,
+                                                    option4Img = (que.Option4Img == null || que.Option4Img.Length == 0 ? null : que.Option4Img),
                                                     Option5 = que.Option5,
-                                                    option5Img = que.Option5Img,
+                                                    option5Img = (que.Option5Img == null || que.Option5Img.Length == 0 ? null : que.Option5Img),
                                                     ResolutionTips = que.ResolutionTips,
                                                     No = queNo,
                                                     Type = que.QueType,
                                                     UseCount = 0,
-                                                    VersionFlag = DateTime.Now.ToNormalStringWithout_ymd()
+                                                    VersionFlag = DateTime.Now.ToNormalStringWithout_ymd(),
                                                 });
                                             else
                                                 db.Questionsinfo_New.Add(new Questionsinfo_New
                                                 {
                                                     sourcedoc = "UserQuestionMockPaper",
-                                                    StandardAnwser = que.Anwser,
+                                                    StandardAnwser = que.Answer,
                                                     FK_SpecialtyType = rule.SpecialtyId,
                                                     CreateTime = mock_paper.ExamPaperCreateTime,
                                                     CreateUserName = data.UserName,
@@ -179,19 +181,19 @@ namespace Api.Queue.Impl
                                                     FK_KnowledgePoint = know.KnowNo,
                                                     IsDelete = 0,
                                                     Name = que.QueContent,
-                                                    nameImg = que.NameImg,
+                                                    nameImg = (que.NameImg == null || que.NameImg.Length == 0 ? null : que.NameImg),
                                                     Option0 = que.Option0,
-                                                    option0Img = que.Option0Img,
+                                                    option0Img = (que.Option0Img == null || que.Option0Img.Length == 0 ? null : que.Option0Img),
                                                     Option1 = que.Option1,
-                                                    option1Img = que.Option1Img,
+                                                    option1Img = (que.Option1Img == null || que.Option1Img.Length == 0 ? null : que.Option1Img),
                                                     Option2 = que.Option2,
-                                                    option2Img = que.Option2Img,
+                                                    option2Img = (que.Option2Img == null || que.Option2Img.Length == 0 ? null : que.Option2Img),
                                                     Option3 = que.Option3,
-                                                    option3Img = que.Option3Img,
+                                                    option3Img = (que.Option3Img == null || que.Option3Img.Length == 0 ? null : que.Option3Img),
                                                     Option4 = que.Option4,
-                                                    option4Img = que.Option4Img,
+                                                    option4Img = (que.Option4Img == null || que.Option4Img.Length == 0 ? null : que.Option4Img),
                                                     Option5 = que.Option5,
-                                                    option5Img = que.Option5Img,
+                                                    option5Img = (que.Option5Img == null || que.Option5Img.Length == 0 ? null : que.Option5Img),
                                                     ResolutionTips = que.ResolutionTips,
                                                     No = queNo,
                                                     Type = que.QueType,
@@ -208,7 +210,7 @@ namespace Api.Queue.Impl
                                                     QuestionType = que.QueType
                                                 });
 
-                                            db.SaveChanges();
+                                            await db.SaveChangesAsync();
                                         }
 
                                     }
@@ -228,11 +230,12 @@ namespace Api.Queue.Impl
                                 }, Log4NetLevel.Error);
                                 LogWriter.Instance.AddLog(Newtonsoft.Json.JsonConvert.SerializeObject(data));
                             }
+                            hasData = _queue.TryDequeue(out data);
                         }
                     }
                 }
             }
-
+            _isEnd = true;
         }
     }
 }

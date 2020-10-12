@@ -163,10 +163,12 @@
     <Compile Include="Api\Controllers\TestController.cs" />
     <Compile Include="Api\HttpResultModel.cs" />
     <Compile Include="Api\MockTestPaperController\MockTestPaperController.cs" />
+    <Compile Include="Api\MockTestPaperController\Model\BaseRule.cs" />
     <Compile Include="Api\MockTestPaperController\Model\KVModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\MockPaperInfo.cs" />
     <Compile Include="Api\MockTestPaperController\Model\PutQuestionModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\QuestionRule.cs" />
+    <Compile Include="Api\MockTestPaperController\Model\RuleEditModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\RuleModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\UserInfoModel.cs" />
     <Compile Include="Api\Model\CheckModel.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="Api\Model\PaperUploadModel.cs" />
     <Compile Include="Api\Model\ProvinceModel.cs" />
     <Compile Include="Api\Model\QueryModel.cs" />
+    <Compile Include="Api\MockTestPaperController\Model\QuestionCheckModel.cs" />
     <Compile Include="Api\Model\QuestionsModel.cs" />
     <Compile Include="Api\Model\RegisterModel.cs" />
     <Compile Include="Api\Model\RenewCheckModel.cs" />
@@ -192,7 +195,10 @@
     <Compile Include="Api\Model\TeacherBIndModel.cs" />
     <Compile Include="Api\Model\UploadUser.cs" />
     <Compile Include="Api\Model\UserEditInfoModel.cs" />
+    <Compile Include="Api\Model\VersionModel.cs" />
     <Compile Include="Api\PhoneController\PhoneController.cs" />
+    <Compile Include="Api\ProductController\Model\HttpVersionResult.cs" />
+    <Compile Include="Api\ProductController\UpdateController.cs" />
     <Compile Include="Api\RenewController\RenewController.cs" />
     <Compile Include="Api\ShareController\ShareController.cs" />
     <Compile Include="Api\ShareController\ShareManagerController.cs" />
@@ -229,7 +235,9 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="log4net.config" />
+    <Content Include="product_version.json" />
     <None Include="packages.config" />
+    <Content Include="ProductPackage\TTLX.MockTestPaper_V2\TTLX.MockTestPaper_V2_2.0.0.0.zip" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="App_Data\ttlxexam.pfx" />
   </ItemGroup>

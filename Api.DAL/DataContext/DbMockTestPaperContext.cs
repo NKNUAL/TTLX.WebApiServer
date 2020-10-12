@@ -68,14 +68,6 @@ namespace Api.DAL.DataContext
         public virtual DbSet<QuestionsType> QuestionsType { get; set; }
         public virtual DbSet<ReviewQuestionsUsers> ReviewQuestionsUsers { get; set; }
         public virtual DbSet<ScoreResultDetail> ScoreResultDetail { get; set; }
-        public virtual DbSet<UserQuestionRules> UserQuestionRules { get; set; }
-        public virtual DbSet<UserQuestionRules_Course_Relation> UserQuestionRules_Course_Relation
-        { get; set; }
-        public virtual DbSet<UserQuestionRules_Know_Relation> UserQuestionRules_Know_Relation
-        { get; set; }
-        public virtual DbSet<UserQuestionMockTestPaper> UserQuestionMockTestPaper
-        { get; set; }
-        public virtual DbSet<UserQuestionMockTestPaperQuestionRelation> UserQuestionMockTestPaperQuestionRelation { get; set; }
         public virtual DbSet<UserTable> UserTable { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

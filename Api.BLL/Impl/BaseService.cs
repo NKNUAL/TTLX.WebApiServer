@@ -41,7 +41,7 @@ namespace Api.BLL.Impl
 
             List<CourseKVModel> GetCourse()
             {
-                using (DbMockTestPaperContext db = new DbMockTestPaperContext())
+                using (DbMockTestPaperSchoolContext db = new DbMockTestPaperSchoolContext())
                 {
                     List<CourseKVModel> models = new List<CourseKVModel>();
 
@@ -101,7 +101,7 @@ namespace Api.BLL.Impl
 
             List<KnowKVModel> GetKnow()
             {
-                using (DbMockTestPaperContext db = new DbMockTestPaperContext())
+                using (DbMockTestPaperSchoolContext db = new DbMockTestPaperSchoolContext())
                 {
                     List<KnowKVModel> models = new List<KnowKVModel>();
 

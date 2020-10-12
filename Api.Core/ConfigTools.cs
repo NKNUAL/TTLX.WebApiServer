@@ -11,7 +11,7 @@ namespace Api.Core
 {
     public class ConfigTools
     {
-        static string desKey = "ttlx.@pd";
+        static readonly string desKey = "ttlx.@pd";
         /// <summary>
         /// 获取数据库连接字符串（带解密）
         /// </summary>

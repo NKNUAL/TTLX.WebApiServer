@@ -39,7 +39,7 @@ namespace Api.Queue.QueueModel
         public string Option4 { get; set; }
         public string Option5 { get; set; }
         public string ResolutionTips { get; set; }
-        public string Anwser { get; set; }
+        public string Answer { get; set; }
         public byte[] NameImg { get; set; }
         public byte[] Option0Img { get; set; }
         public byte[] Option1Img { get; set; }
@@ -47,5 +47,6 @@ namespace Api.Queue.QueueModel
         public byte[] Option3Img { get; set; }
         public byte[] Option4Img { get; set; }
         public byte[] Option5Img { get; set; }
+        public int DifficultLevel { get; set; }
     }
 }
