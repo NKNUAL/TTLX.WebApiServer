@@ -638,41 +638,25 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         /// <param name="userId"></param>
         /// <param name="put"></param>
         /// <returns></returns>
-        //[HttpPut]
-        //[Route("put/paper")]
-        //public HttpResultModel PutPaper(PutQuestionModel put)
-        //{
-        //    if (put == null)
-        //        return new HttpResultModel { success = false, message = "题目为空" };
+        [HttpPut]
+        [Route("put/paper")]
+        public HttpResultModel PutPaper(PutQuestionModel put)
+        {
+            if (put == null)
+                return new HttpResultModel { success = false, message = "题目为空" };
 
-        //    var ruleItems = GetRulesByRuleNo(put.UserId, put.RuleNo);
+            var ruleItems = GetRulesByRuleNo(put.UserId, put.RuleNo);
 
-        //    if (ruleItems.Count == 0)
-        //        return new HttpResultModel { success = false, message = "不存在此规则" };
+            if (ruleItems.Count == 0)
+                return new HttpResultModel { success = false, message = "不存在此规则" };
 
-        //    Dictionary<string, PutQuestionCourseModel> dicCourse = new Dictionary<string, PutQuestionCourseModel>();
 
-        //    foreach (var item in ruleItems)
-        //    {
-        //        if (!dicCourse.ContainsKey(item.CourseNo))
-        //            dicCourse.Add(item.CourseNo, put.Courses.Find(s => s.CourseNo == item.CourseNo));
+            var uploadModel = Mapper.Map<MockTestPaperQueueModel>(put);
+            GlabolDataExe.Instance.AddData(QueueDataType.MockTestPaper, uploadModel);
 
-        //        var course = dicCourse[item.CourseNo];
-        //        if (course == null)
-        //            return new HttpResultModel { success = false, message = "请按照出题规则出题" };
-        //        var know = course.Knows.Find(s => s.KnowNo == item.KnowNo);
-        //        if (know == null)
-        //            return new HttpResultModel { success = false, message = "请按照出题规则出题" };
-        //        if (know.Questions == null || know.Questions.Count != item.KnowQueCount)
-        //            return new HttpResultModel { success = false, message = "请按照出题规则出题" };
-        //    }
+            return new HttpResultModel { success = true };
 
-        //    var uploadModel = Mapper.Map<MockTestPaperQueueModel>(put);
-        //    GlabolDataExe.Instance.AddData(QueueDataType.MockTestPaper, uploadModel);
-
-        //    return new HttpResultModel { success = true };
-
-        //}
+        }
 
         /// <summary>
         /// 修改题目内容
