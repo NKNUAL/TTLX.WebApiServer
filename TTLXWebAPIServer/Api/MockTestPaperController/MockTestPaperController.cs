@@ -592,6 +592,8 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                                 CourseRuleNo = courseRuleNo,
                             });
 
+                            ret += dbMock.SaveChanges();
+
                             if (course.KnowRules == null)
                                 continue;
 
@@ -921,9 +923,10 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             {
                 return (from a in dbMock.UserQuestionRules
                         join b in dbMock.UserQuestionRules_Course_Relation on a.RuleNo equals b.RuleNo
-                        join c in dbMock.UserQuestionRules_Know_Relation on b.CourseRuleNo equals c.CourseRuleNo
+                        join c in dbMock.UserQuestionRules_Know_Relation on b.CourseRuleNo equals c.CourseRuleNo into temp_c
+                        from d in temp_c.DefaultIfEmpty()
                         where a.IsDelete == 0 && a.UserId == userId
-                        orderby a.RuleNo, b.CourseNo, c.KnowNo
+                        orderby a.RuleNo, b.CourseNo, d.KnowNo
                         select new RuleModel
                         {
                             RuleNo = a.RuleNo,
@@ -935,10 +938,10 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                             Courese_DuoxuanCount = b.DuoxuanCount,
                             Courese_PanduanCount = b.PanduanCount,
                             Courese_QueCount = b.TotalCount,
-                            KnowNo = c.KnowNo,
-                            Know_DanxuanCount = c.DanxuanCount,
-                            Know_DuoxuanCount = c.DuoxuanCount,
-                            Know_PanduanCount = c.PanduanCount
+                            KnowNo = d == null ? null : d.KnowNo,
+                            Know_DanxuanCount = d == null ? null : d.DanxuanCount,
+                            Know_DuoxuanCount = d == null ? null : d.DuoxuanCount,
+                            Know_PanduanCount = d == null ? null : d.PanduanCount
                         }).ToList();
             }
         }
@@ -954,9 +957,10 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             {
                 return (from a in dbMock.UserQuestionRules
                         join b in dbMock.UserQuestionRules_Course_Relation on a.RuleNo equals b.RuleNo
-                        join c in dbMock.UserQuestionRules_Know_Relation on b.CourseRuleNo equals c.CourseRuleNo
+                        join c in dbMock.UserQuestionRules_Know_Relation on b.CourseRuleNo equals c.CourseRuleNo into temp_c
+                        from d in temp_c.DefaultIfEmpty()
                         where a.IsDelete == 0 && a.UserId == userId && a.RuleNo == ruleNo
-                        orderby a.RuleNo, b.CourseNo, c.KnowNo
+                        orderby a.RuleNo, b.CourseNo, d.KnowNo
                         select new RuleModel
                         {
                             RuleNo = a.RuleNo,
@@ -968,11 +972,12 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                             Courese_DuoxuanCount = b.DuoxuanCount,
                             Courese_PanduanCount = b.PanduanCount,
                             Courese_QueCount = b.TotalCount,
-                            KnowNo = c.KnowNo,
-                            Know_DanxuanCount = c.DanxuanCount,
-                            Know_DuoxuanCount = c.DuoxuanCount,
-                            Know_PanduanCount = c.PanduanCount
+                            KnowNo = d == null ? null : d.KnowNo,
+                            Know_DanxuanCount = d == null ? null : d.DanxuanCount,
+                            Know_DuoxuanCount = d == null ? null : d.DuoxuanCount,
+                            Know_PanduanCount = d == null ? null : d.PanduanCount
                         }).ToList();
+
             }
         }
     }
