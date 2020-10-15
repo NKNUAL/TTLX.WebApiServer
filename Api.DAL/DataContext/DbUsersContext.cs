@@ -19,6 +19,10 @@ namespace Api.DAL.DataContext
         public virtual DbSet<Base_Area> Base_Area { get; set; }
         public virtual DbSet<Base_courseType> Base_courseType { get; set; }
         public virtual DbSet<Base_courseType_Computer> Base_courseType_Computer { get; set; }
+        public virtual DbSet<Base_knowledgepoint> Base_knowledgepoint { get; set; }
+        public virtual DbSet<Base_knowledgepoint_Computer> Base_knowledgepoint_Computer { get; set; }
+        public virtual DbSet<CloudExamRule> CloudExamRule { get; set; }
+        public virtual DbSet<CloudExamRule_Computer> CloudExamRule_Computer { get; set; }
         public virtual DbSet<Base_Province> Base_Province { get; set; }
         public virtual DbSet<Base_School> Base_School { get; set; }
         public virtual DbSet<Base_specialtyType> Base_specialtyType { get; set; }
@@ -40,6 +44,7 @@ namespace Api.DAL.DataContext
         public virtual DbSet<V_QuestionsReviewRecord> V_QuestionsReviewRecord { get; set; }
         public virtual DbSet<V_TotalErrorQuestion> V_TotalErrorQuestion { get; set; }
         public virtual DbSet<V_TotalQuestion> V_TotalQuestion { get; set; }
+        public virtual DbSet<SpecialtyBaseRules> SpecialtyBaseRules { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

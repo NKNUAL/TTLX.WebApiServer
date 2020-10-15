@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -39,7 +41,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -49,7 +51,7 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -479,9 +481,13 @@
     <Compile Include="Entity_Users\Base_Area.cs" />
     <Compile Include="Entity_Users\Base_courseType.cs" />
     <Compile Include="Entity_Users\Base_courseType_Computer.cs" />
+    <Compile Include="Entity_Users\Base_knowledgepoint.cs" />
+    <Compile Include="Entity_Users\Base_knowledgepoint_Computer.cs" />
     <Compile Include="Entity_Users\Base_Province.cs" />
     <Compile Include="Entity_Users\Base_School.cs" />
     <Compile Include="Entity_Users\Base_specialtyType.cs" />
+    <Compile Include="Entity_Users\CloudExamRule.cs" />
+    <Compile Include="Entity_Users\CloudExamRule_Computer.cs" />
     <Compile Include="Entity_Users\ErrorQuestionReviewUser.cs" />
     <Compile Include="Entity_Users\ErrorQuestions.cs" />
     <Compile Include="Entity_Users\ErrorQuestionsFeedbackRecord.cs" />
@@ -491,6 +497,7 @@
     <Compile Include="Entity_Users\QuestionReviewMoney.cs" />
     <Compile Include="Entity_Users\MockTestPaperAuth.cs" />
     <Compile Include="Entity_Users\ReviewQuestionAuth.cs" />
+    <Compile Include="Entity_Users\SpecialtyBaseRules.cs" />
     <Compile Include="Entity_Users\SysDbType.cs" />
     <Compile Include="Entity_Users\SysMenu.cs" />
     <Compile Include="Entity_Users\SysRole.cs" />

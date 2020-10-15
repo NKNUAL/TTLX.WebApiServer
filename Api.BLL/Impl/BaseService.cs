@@ -41,23 +41,23 @@ namespace Api.BLL.Impl
 
             List<CourseKVModel> GetCourse()
             {
-                using (DbMockTestPaperSchoolContext db = new DbMockTestPaperSchoolContext())
+                using (DbUsersContext dbUser = new DbUsersContext())
                 {
                     List<CourseKVModel> models = new List<CourseKVModel>();
 
                     if (specialtyId == "0")
                     {
-                        models = db.Base_courseType_Computer
+                        models = dbUser.Base_courseType_Computer
                             .Where(c => c.FK_SpecialtyType == specialtyId)
                             .Select(c => new CourseKVModel
                             {
                                 CourseNo = c.No.ToString(),
-                                CourseName = c.Name
+                                CourseName = c.Name + "：" + c.Remark
                             }).ToList();
                     }
                     else
                     {
-                        models = db.Base_courseType
+                        models = dbUser.Base_courseType
                             .Where(c => c.FK_SpecialtyType == specialtyId)
                             .Select(c => new CourseKVModel
                             {
@@ -69,6 +69,8 @@ namespace Api.BLL.Impl
 
                     return models;
                 }
+                
+
             }
 
         }
@@ -101,13 +103,13 @@ namespace Api.BLL.Impl
 
             List<KnowKVModel> GetKnow()
             {
-                using (DbMockTestPaperSchoolContext db = new DbMockTestPaperSchoolContext())
+                using (DbUsersContext dbUser = new DbUsersContext())
                 {
                     List<KnowKVModel> models = new List<KnowKVModel>();
 
                     if (specialtyId == "0")
                     {
-                        models = db.Base_knowledgepoint_Computer
+                        models = dbUser.Base_knowledgepoint_Computer
                             .Where(c => c.FK_CourseType == courseNo)
                             .Select(c => new KnowKVModel
                             {
@@ -117,7 +119,7 @@ namespace Api.BLL.Impl
                     }
                     else
                     {
-                        models = db.Base_knowledgepoint
+                        models = dbUser.Base_knowledgepoint
                             .Where(c => c.FK_CourseType == courseNo)
                             .Select(c => new KnowKVModel
                             {
@@ -125,12 +127,9 @@ namespace Api.BLL.Impl
                                 KnowName = c.Name
                             }).ToList();
                     }
-
-
                     return models;
                 }
             }
-
         }
 
         public List<Base_School> GetSchools()
