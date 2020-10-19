@@ -35,7 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,7 +45,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=5.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -166,12 +166,14 @@
     <Compile Include="Api\HttpResultModel.cs" />
     <Compile Include="Api\MockTestPaperController\MockTestPaperController.cs" />
     <Compile Include="Api\MockTestPaperController\Model\BaseRule.cs" />
+    <Compile Include="Api\MockTestPaperController\Model\EditPaperRecord.cs" />
     <Compile Include="Api\MockTestPaperController\Model\KVModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\MockPaperInfo.cs" />
     <Compile Include="Api\MockTestPaperController\Model\PutQuestionModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\QuestionRule.cs" />
     <Compile Include="Api\MockTestPaperController\Model\RuleEditModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\RuleModel.cs" />
+    <Compile Include="Api\MockTestPaperController\Model\UploadLocalRecord.cs" />
     <Compile Include="Api\MockTestPaperController\Model\UserInfoModel.cs" />
     <Compile Include="Api\Model\CheckModel.cs" />
     <Compile Include="Api\Model\CommentModel.cs" />
@@ -234,12 +236,13 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ProductPackage\TTLX.MockTestPaper_V2\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config" />
     <Content Include="product_version.json" />
     <None Include="packages.config" />
-    <Content Include="ProductPackage\TTLX.MockTestPaper_V2\TTLX.MockTestPaper_V2_2.0.0.0.zip" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="App_Data\ttlxexam.pfx" />
   </ItemGroup>

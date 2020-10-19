@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -184,6 +184,12 @@
     <Compile Include="Entity_MockTestPaper_School\ExercisePaper_Computer.cs" />
     <Compile Include="Entity_MockTestPaper_School\ExerciseScoreResult.cs" />
     <Compile Include="Entity_MockTestPaper_School\GetSmsCodeHistory.cs" />
+    <Compile Include="Entity_MockTestPaper_School\LocalPaperGeneralQuestion.cs" />
+    <Compile Include="Entity_MockTestPaper_School\LocalPaperGeneralQuestionRelation.cs" />
+    <Compile Include="Entity_MockTestPaper_School\LocalPaperQuestionRelation.cs" />
+    <Compile Include="Entity_MockTestPaper_School\LocalPaperQuestionRelation_hl.cs" />
+    <Compile Include="Entity_MockTestPaper_School\LocalPaperQuestions.cs" />
+    <Compile Include="Entity_MockTestPaper_School\LocalPaperRecord.cs" />
     <Compile Include="Entity_MockTestPaper_School\LocalRegInfo.cs" />
     <Compile Include="Entity_MockTestPaper_School\LogDetails.cs" />
     <Compile Include="Entity_MockTestPaper_School\MockTestPaper.cs" />

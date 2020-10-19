@@ -137,6 +137,13 @@ namespace Api.DAL.DataContext
         public virtual DbSet<V_StudentScoreDetail> V_StudentScoreDetail { get; set; }
         public virtual DbSet<V_StudentScoreDetail_Old> V_StudentScoreDetail_Old { get; set; }
 
+        public virtual DbSet<LocalPaperGeneralQuestion> LocalPaperGeneralQuestion { get; set; }
+        public virtual DbSet<LocalPaperGeneralQuestionRelation> LocalPaperGeneralQuestionRelation { get; set; }
+        public virtual DbSet<LocalPaperQuestionRelation> LocalPaperQuestionRelation { get; set; }
+        public virtual DbSet<LocalPaperQuestionRelation_hl> LocalPaperQuestionRelation_hl { get; set; }
+        public virtual DbSet<LocalPaperQuestions> LocalPaperQuestions { get; set; }
+        public virtual DbSet<LocalPaperRecord> LocalPaperRecord { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 

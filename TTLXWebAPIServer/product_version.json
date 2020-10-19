@@ -1,7 +1,7 @@
 [
   {
     "name": "TTLX.MockTestPaper_V2",
-    "package_url": "http://116.62.131.33:52052/ProductPackage/TTLX.MockTestPaper_V2/TTLX.MockTestPaper_V2_2.0.0.0.zip",
-    "version": "2.0.0.0"
+    "package_url": "http://localhost:52052/ProductPackage/TTLX.MockTestPaper_V2/TTLX.MockTestPaper_V2_2.0.0.1.zip",
+    "version": "2.0.0.1"
   }
 ]

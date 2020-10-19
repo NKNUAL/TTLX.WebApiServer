@@ -131,7 +131,6 @@ E:\Code\TTLXExamSystemMonitor\TTLXWebAPIServer\Api.Core\obj\Debug\Api.Core.cspro
 E:\Code\TTLXExamSystemMonitor\TTLXWebAPIServer\Api.Core\obj\Debug\Api.Core.csproj.CopyComplete
 E:\Code\TTLXExamSystemMonitor\TTLXWebAPIServer\Api.Core\obj\Debug\Api.Core.dll
 E:\Code\TTLXExamSystemMonitor\TTLXWebAPIServer\Api.Core\obj\Debug\Api.Core.pdb
-E:\Code\TTLXExamSystemMonitor\TTLXWebAPIServer\Api.Core\obj\Debug\Api.Core.csprojAssemblyReference.cache
 E:\git_reps\TTLX.WebApiServer\Api.Core\bin\Debug\Api.Core.dll.config
 E:\git_reps\TTLX.WebApiServer\Api.Core\bin\Debug\Api.Core.dll
 E:\git_reps\TTLX.WebApiServer\Api.Core\bin\Debug\Api.Core.pdb

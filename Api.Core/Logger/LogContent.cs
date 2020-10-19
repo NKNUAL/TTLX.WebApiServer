@@ -15,7 +15,7 @@ namespace Api.Core.Logger
     public class LogContent
     {
         private static ILog _logDb = LogManager.GetLogger("AdoNetAppender_SQLServer");
-        private static ILog _logFile = LogManager.GetLogger("LogFileAppender");
+        //private static ILog _logFile = LogManager.GetLogger("LogFileAppender");
         #region 单例
 
         private static readonly object padlock = new object();
@@ -76,24 +76,7 @@ namespace Api.Core.Logger
         /// <param name="log4Level"></param>
         public void WriteLog(string message, Log4NetLevel log4Level)
         {
-            switch (log4Level)
-            {
-                case Log4NetLevel.Warn:
-                    _logFile.Warn(message);
-                    break;
-                case Log4NetLevel.Debug:
-                    _logFile.Debug(message);
-                    break;
-                case Log4NetLevel.Info:
-                    _logFile.Info(message);
-                    break;
-                case Log4NetLevel.Fatal:
-                    _logFile.Fatal(message);
-                    break;
-                case Log4NetLevel.Error:
-                    _logFile.Error(message);
-                    break;
-            }
+            LogWriter.Instance.AddLog(message);
         }
     }
     /// <summary>

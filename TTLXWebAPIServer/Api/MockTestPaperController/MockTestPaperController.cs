@@ -2,10 +2,10 @@
 using Api.BLL.ServiceModel;
 using Api.Core;
 using Api.Core.Enum;
+using Api.Core.Extensions;
 using Api.Core.Logger;
 using Api.DAL.DataContext;
 using Api.DAL.Entity_MockTestPaper_School;
-using Api.DAL.Entity_Users;
 using Api.Queue;
 using Api.Queue.QueueModel;
 using AutoMapper;
@@ -909,6 +909,311 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
 
         }
 
+        #region 本地记录相关Api
+
+        /// <summary>
+        /// 上传本地记录
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("upload/record")]
+        public async Task<HttpResultModel> UploadLocalRecord(UploadLocalRecord upload)
+        {
+            LogContent.Instance.WriteLog($"{upload.UserId}上传本地记录", Log4NetLevel.Info);
+
+            if (upload == null)
+                return new HttpResultModel { success = false, message = "参数异常" };
+
+            LogContent.Instance.WriteLog($"{upload.UserId}上传本地记录", Log4NetLevel.Info);
+
+            try
+            {
+                using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+                {
+                    if (upload.Papers == null)
+                        return new HttpResultModel { success = false, message = "没有需要上传的记录" };
+
+                    foreach (var paper in upload.Papers)
+                    {
+                        dbMock.LocalPaperRecord.Add(new LocalPaperRecord
+                        {
+                            CreateUserId = upload.UserId,
+                            IsNormal = 0,
+                            PaperEditDate = paper.EditDate,
+                            RuleNo = paper.RuleNo,
+                            PGuid = paper.PGuid
+                        });
+                        foreach (var course in paper.DicQuestions)
+                        {
+                            foreach (var know in course.Value)
+                            {
+                                foreach (var que in know.Value)
+                                {
+                                    dbMock.LocalPaperQuestions.Add(new LocalPaperQuestions
+                                    {
+                                        Answer = que.Answer,
+                                        CourseNo = course.Key,
+                                        DifficultLevel = que.DifficultLevel,
+                                        KnowNo = know.Key,
+                                        NameImg = que.NameImg,
+                                        Option0 = que.Option0,
+                                        option0Img = que.Option0Img,
+                                        Option1 = que.Option1,
+                                        option1Img = que.Option1Img,
+                                        Option2 = que.Option2,
+                                        option2Img = que.Option2Img,
+                                        Option3 = que.Option3,
+                                        option3Img = que.Option3Img,
+                                        Option4 = que.Option4,
+                                        option4Img = que.Option4Img,
+                                        Option5 = que.Option5,
+                                        option5Img = que.Option5Img,
+                                        QGuid = que.No,
+                                        QueContent = que.QueContent,
+                                        QueType = que.QueType,
+                                        ResolutionTips = que.ResolutionTips,
+                                    });
+
+                                    dbMock.LocalPaperQuestionRelation.Add(new LocalPaperQuestionRelation
+                                    {
+                                        PGuid = paper.PGuid,
+                                        QGuid = que.No
+                                    });
+                                }
+                            }
+                        }
+                        await dbMock.SaveChangesAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogContent.Instance.WriteLog($"{upload.UserId}上传本地记录失败：" + ex.Message, Log4NetLevel.Error);
+                return new HttpResultModel { success = true };
+            }
+
+            LogContent.Instance.WriteLog($"{upload.UserId}上传本地记录成功", Log4NetLevel.Info);
+
+            return new HttpResultModel { success = true };
+        }
+
+        /// <summary>
+        /// 获取编辑记录
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("get/record/{userId}/{specialtyId}")]
+        public HttpResultModel GetLocalPaperRecords(string userId, int specialtyId)
+        {
+            if (specialtyId != 5)
+            {
+                using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+                {
+                    var query = from a in dbMock.LocalPaperRecord
+                                join b in dbMock.LocalPaperQuestionRelation on a.PGuid equals b.PGuid
+                                join c in dbMock.LocalPaperQuestions on b.QGuid equals c.QGuid
+                                where a.IsNormal == 0 && a.CreateUserId == userId
+                                orderby a.PaperEditDate descending
+                                select new
+                                {
+                                    a.PGuid,
+                                    a.RuleNo,
+                                    a.PaperEditDate,
+                                    Question = c
+                                };
+
+                    var ques = query.ToList();
+
+                    Dictionary<string, EditPaperRecord> dic_record = new Dictionary<string, EditPaperRecord>();
+
+                    foreach (var item in ques)
+                    {
+                        if (!dic_record.ContainsKey(item.PGuid))
+                        {
+                            dic_record.Add(item.PGuid, new EditPaperRecord
+                            {
+                                RuleNo = item.RuleNo,
+                                PGuid = item.PGuid,
+                                EditDate = item.PaperEditDate,
+                                DicQuestions = new Dictionary<string, Dictionary<string, List<QuestionsInfoModel>>>()
+                            });
+                        }
+
+                        if (!dic_record[item.PGuid].DicQuestions.ContainsKey(item.Question.CourseNo))
+                        {
+                            dic_record[item.PGuid].DicQuestions
+                                .Add(item.Question.CourseNo, new Dictionary<string, List<QuestionsInfoModel>>());
+                        }
+
+                        if (!dic_record[item.PGuid].DicQuestions[item.Question.CourseNo].ContainsKey(item.Question.KnowNo))
+                        {
+                            dic_record[item.PGuid].DicQuestions[item.Question.CourseNo]
+                                .Add(item.Question.KnowNo, new List<QuestionsInfoModel>());
+                        }
+
+                        dic_record[item.PGuid].DicQuestions[item.Question.CourseNo][item.Question.KnowNo]
+                            .Add(new QuestionsInfoModel
+                            {
+                                Answer = item.Question.Answer,
+                                NameImg = item.Question.NameImg,
+                                Option0 = item.Question.Option0,
+                                Option0Img = item.Question.option0Img,
+                                Option1 = item.Question.Option1,
+                                Option1Img = item.Question.option1Img,
+                                Option2 = item.Question.Option2,
+                                Option2Img = item.Question.option2Img,
+                                Option3 = item.Question.Option3,
+                                Option3Img = item.Question.option3Img,
+                                Option4 = item.Question.Option4,
+                                Option4Img = item.Question.option4Img,
+                                Option5 = item.Question.Option5,
+                                Option5Img = item.Question.option5Img,
+                                QueContent = item.Question.QueContent,
+                                QueType = item.Question.QueType,
+                                ResolutionTips = item.Question.ResolutionTips,
+                                No = item.Question.QGuid
+                            });
+                    }
+
+                    return new HttpResultModel { success = true, data = dic_record.Values.ToList() };
+                }
+            }
+            else//护理专业
+            {
+
+                return new HttpResultModel { success = false, message = "护理专业还未实现" };
+            }
+        }
+
+        /// <summary>
+        /// 保存本地试卷
+        /// </summary>
+        /// <param name="pGuid"></param>
+        /// <param name="ruleNo"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("save/record/{userId}")]
+        public async void SaveLocalPaper(string userId, string pGuid, string ruleNo)
+        {
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+            {
+                var paper = dbMock.LocalPaperRecord.FirstOrDefault(p => p.PGuid == pGuid);
+
+                if (paper == null)
+                {
+                    dbMock.LocalPaperRecord.Add(new LocalPaperRecord
+                    {
+                        IsNormal = 0,
+                        PaperEditDate = DateTime.Now.ToNormalString(),
+                        PGuid = pGuid,
+                        RuleNo = ruleNo,
+                        CreateUserId = userId
+                    });
+
+                    await dbMock.SaveChangesAsync();
+                }
+                else
+                {
+                    paper.PaperEditDate = DateTime.Now.ToNormalString();
+                    await dbMock.SaveChangesAsync();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 保存本地题目
+        /// </summary>
+        [HttpPost]
+        [Route("save/question/{pGuid}/{specialtyId}/{courseNo}/{knowNo}")]
+        public async void SaveLocalQuestion(string pGuid, int specialtyId, string courseNo, string knowNo, QuestionsInfoModel info)
+        {
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+            {
+                try
+                {
+                    var que = dbMock.LocalPaperQuestions.FirstOrDefault(q => q.QGuid == info.No);
+
+                    if (que == null)
+                    {
+                        dbMock.LocalPaperQuestions.Add(new LocalPaperQuestions
+                        {
+                            Answer = info.Answer,
+                            CourseNo = courseNo,
+                            DifficultLevel = info.DifficultLevel,
+                            KnowNo = knowNo,
+                            NameImg = info.NameImg,
+                            Option0 = info.Option0,
+                            option0Img = info.Option0Img,
+                            Option1 = info.Option1,
+                            option1Img = info.Option1Img,
+                            Option2 = info.Option2,
+                            option2Img = info.Option2Img,
+                            Option3 = info.Option3,
+                            option3Img = info.Option3Img,
+                            QGuid = info.No,
+                            QueContent = info.QueContent,
+                            QueType = info.QueType,
+                            ResolutionTips = info.ResolutionTips,
+                        });
+                        await dbMock.SaveChangesAsync();
+
+                        dbMock.LocalPaperQuestionRelation.Add(new LocalPaperQuestionRelation
+                        {
+                            PGuid = pGuid,
+                            QGuid = info.No,
+                        });
+
+                        await dbMock.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        que.Answer = info.Answer;
+                        que.Option0 = info.Option0;
+                        que.option0Img = info.Option0Img;
+                        que.Option1 = info.Option1;
+                        que.option1Img = info.Option1Img;
+                        que.Option2 = info.Option2;
+                        que.option2Img = info.Option2Img;
+                        que.Option3 = info.Option3;
+                        que.option3Img = info.Option3Img;
+                        que.QueContent = info.QueContent;
+                        que.NameImg = info.NameImg;
+                        que.QueType = info.QueType;
+                        que.ResolutionTips = info.ResolutionTips;
+                        que.DifficultLevel = info.DifficultLevel;
+                        await dbMock.SaveChangesAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogContent.Instance.WriteLog("保存本地试题出错：" + ex.Message, Log4NetLevel.Error);
+                    string content = string.Format("pGuid:{0}\r\nspecialtyId:{1}\r\ncourseNo:{2}\r\nknowNo:{3}\r\nque:{4}",
+                        pGuid, specialtyId, courseNo, knowNo, Newtonsoft.Json.JsonConvert.SerializeObject(info));
+                    LogContent.Instance.WriteLog(content, Log4NetLevel.Info);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 删除本地编辑记录
+        /// </summary>
+        /// <param name="pGuid"></param>
+        [HttpGet]
+        [Route("del/record/{pGuid}")]
+        public async void DeleteLocalRecord(string pGuid)
+        {
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+            {
+                var paper = dbMock.LocalPaperRecord.FirstOrDefault(q => q.PGuid == pGuid);
+                if (paper != null)
+                {
+                    paper.IsNormal = 1;
+                    await dbMock.SaveChangesAsync();
+                }
+            }
+        }
+        #endregion
 
         /// <summary>
         /// 获取规则
