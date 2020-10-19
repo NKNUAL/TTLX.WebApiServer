@@ -113,7 +113,6 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         public HttpResultModel GetRules(string userId)
         {
 
-
             if (string.IsNullOrEmpty(userId))
                 return new HttpResultModel { success = false, message = "参数异常" };
 
@@ -126,67 +125,103 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             if (user == null)
                 return new HttpResultModel { success = false, message = "用户不存在" };
 
-            var rules = GetRulesByUserId(userId);
-
-            Dictionary<string, QuestionRule> dic_rules = new Dictionary<string, QuestionRule>();
-
-            var dic_course = _baseService.GetCourseTypes(user.FK_Specialty)
-                .ToDictionary(k => k.CourseNo, v => v.CourseName);
-
-            Dictionary<string, Dictionary<string, string>> dic_know = new Dictionary<string, Dictionary<string, string>>();
-
-            foreach (var rule in rules)
+            if (int.Parse(user.FK_Specialty) == (int)SpecialtyType.SU)
             {
-                if (!dic_rules.ContainsKey(rule.RuleNo))
+                QuestionRule_Nurse rule = new QuestionRule_Nurse
                 {
-                    dic_rules.Add(rule.RuleNo, new QuestionRule
-                    {
-                        RuleNo = rule.RuleNo,
-                        SpecialtyId = rule.SpecialtyId,
-                        CourseRules = new List<CourseRule>(),
-                        RuleDesc = rule.RuleDesc,
-                        RuleName = rule.RuleName,
-                    });
-                }
+                    RuleNo = Guid.NewGuid().GetGuid(),
+                    RuleName = "护理专业出题规则",
+                    RuleDesc = "护理专业默认规则",
+                    SpecialtyId = user.FK_Specialty,
+                    A_ = new List<NurseQuestionRule>()
+                };
+                rule.A_.Add(new NurseQuestionRule
+                {
+                    QueCount = 35,
+                    SubQueCount = 0,
+                    TypeId = 1,
+                    TypeName = "A1"
+                });
+                rule.A_.Add(new NurseQuestionRule
+                {
+                    QueCount = 10,
+                    SubQueCount = 0,
+                    TypeId = 2,
+                    TypeName = "A1"
+                });
+                rule.A_.Add(new NurseQuestionRule
+                {
+                    QueCount = 5,
+                    SubQueCount = 3,
+                    TypeId = 3,
+                    TypeName = "A3"
+                });
 
-                var course = dic_rules[rule.RuleNo].CourseRules.Find(c => c.CourseNo == rule.CourseNo);
-                if (course == null)
-                {
-                    course = new CourseRule
-                    {
-                        CourseNo = rule.CourseNo,
-                        CourseName = dic_course[rule.CourseNo],
-                        DanxuanCount = rule.Courese_DanxuanCount,
-                        DuoxuanCount = rule.Courese_DuoxuanCount,
-                        PanduanCount = rule.Courese_PanduanCount,
-                        QueCount = rule.Courese_QueCount,
-                        KnowRules = new List<KnowRule>()
-                    };
-                    dic_rules[rule.RuleNo].CourseRules.Add(course);
-                }
-
-                if (!dic_know.ContainsKey(rule.CourseNo))
-                {
-                    dic_know.Add(rule.CourseNo,
-                        _baseService.GetKnowTypes(rule.SpecialtyId, rule.CourseNo)
-                        .ToDictionary(k => k.KnowNo, v => v.KnowName));
-                }
-
-                if (!string.IsNullOrEmpty(rule.KnowNo))
-                {
-                    course.KnowRules.Add(new KnowRule
-                    {
-                        KnowNo = rule.KnowNo,
-                        KnowName = dic_know[rule.CourseNo][rule.KnowNo],
-                        DanxuanCount = rule.Know_DanxuanCount,
-                        DuoxuanCount = rule.Know_DuoxuanCount,
-                        PanduanCount = rule.Know_DuoxuanCount
-                    });
-                }
+                return new HttpResultModel { success = true, data = rule };
             }
+            else
+            {
+                var rules = GetRulesByUserId(userId);
 
-            return new HttpResultModel { success = true, data = dic_rules.Values.ToList() };
+                Dictionary<string, QuestionRule> dic_rules = new Dictionary<string, QuestionRule>();
 
+                var dic_course = _baseService.GetCourseTypes(user.FK_Specialty)
+                    .ToDictionary(k => k.CourseNo, v => v.CourseName);
+
+                Dictionary<string, Dictionary<string, string>> dic_know = new Dictionary<string, Dictionary<string, string>>();
+
+                foreach (var rule in rules)
+                {
+                    if (!dic_rules.ContainsKey(rule.RuleNo))
+                    {
+                        dic_rules.Add(rule.RuleNo, new QuestionRule
+                        {
+                            RuleNo = rule.RuleNo,
+                            SpecialtyId = rule.SpecialtyId,
+                            CourseRules = new List<CourseRule>(),
+                            RuleDesc = rule.RuleDesc,
+                            RuleName = rule.RuleName,
+                        });
+                    }
+
+                    var course = dic_rules[rule.RuleNo].CourseRules.Find(c => c.CourseNo == rule.CourseNo);
+                    if (course == null)
+                    {
+                        course = new CourseRule
+                        {
+                            CourseNo = rule.CourseNo,
+                            CourseName = dic_course[rule.CourseNo],
+                            DanxuanCount = rule.Courese_DanxuanCount,
+                            DuoxuanCount = rule.Courese_DuoxuanCount,
+                            PanduanCount = rule.Courese_PanduanCount,
+                            QueCount = rule.Courese_QueCount,
+                            KnowRules = new List<KnowRule>()
+                        };
+                        dic_rules[rule.RuleNo].CourseRules.Add(course);
+                    }
+
+                    if (!dic_know.ContainsKey(rule.CourseNo))
+                    {
+                        dic_know.Add(rule.CourseNo,
+                            _baseService.GetKnowTypes(rule.SpecialtyId, rule.CourseNo)
+                            .ToDictionary(k => k.KnowNo, v => v.KnowName));
+                    }
+
+                    if (!string.IsNullOrEmpty(rule.KnowNo))
+                    {
+                        course.KnowRules.Add(new KnowRule
+                        {
+                            KnowNo = rule.KnowNo,
+                            KnowName = dic_know[rule.CourseNo][rule.KnowNo],
+                            DanxuanCount = rule.Know_DanxuanCount,
+                            DuoxuanCount = rule.Know_DuoxuanCount,
+                            PanduanCount = rule.Know_DuoxuanCount
+                        });
+                    }
+                }
+
+                return new HttpResultModel { success = true, data = dic_rules.Values.ToList() };
+            }
         }
 
         /// <summary>
@@ -438,7 +473,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                                 where a.PaperID == paperId.ToString()
                                 && new int[] { 1, 2, 3 }.Contains(a.QuestionType ?? 1)//只取选择题
                                 && b.sourcedoc == "UserQuestionMockPaper"
-                                orderby a.QuestionType, a.OrderIndex
+                                orderby a.OrderIndex
                                 select b).ToList();
 
                     foreach (var que in ques)
@@ -476,13 +511,19 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                 }
                 else
                 {
+                    var aaa = from a in dbMock.UserQuestionMockTestPaperQuestionRelation
+                              join b in dbMock.Questionsinfo_New on a.QuestionID equals b.No
+                              where a.PaperID == paperId.ToString()
+                              && new int[] { 1, 2, 3 }.Contains(a.QuestionType ?? 1)//只取选择题
+                              && b.sourcedoc == "UserQuestionMockPaper"
+                              orderby a.OrderIndex
+                              select b;
                     var ques = (from a in dbMock.UserQuestionMockTestPaperQuestionRelation
-                                join b in dbMock.Questionsinfo_New
-                                on a.QuestionID equals b.No
+                                join b in dbMock.Questionsinfo_New on a.QuestionID equals b.No
                                 where a.PaperID == paperId.ToString()
                                 && new int[] { 1, 2, 3 }.Contains(a.QuestionType ?? 1)//只取选择题
                                 && b.sourcedoc == "UserQuestionMockPaper"
-                                orderby a.QuestionType, a.OrderIndex
+                                orderby a.OrderIndex
                                 select b).ToList();
 
                     foreach (var que in ques)

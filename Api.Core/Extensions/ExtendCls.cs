@@ -25,5 +25,10 @@ namespace Api.Core.Extensions
             return dateTime.ToString("yyyyMMdd");
         }
 
+
+        public static string GetGuid(this Guid guid)
+        {
+            return guid.ToString().Replace("-", "");
+        }
     }
 }

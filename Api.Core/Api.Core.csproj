@@ -132,6 +132,7 @@
     <Compile Include="Enum\ProcessStatuDictionary.cs" />
     <Compile Include="Enum\QuestionType.cs" />
     <Compile Include="Enum\RenewType.cs" />
+    <Compile Include="Enum\SpecialtyType.cs" />
     <Compile Include="Extensions\ExtendCls.cs" />
     <Compile Include="LevenshteinDistanceHelper.cs" />
     <Compile Include="Logger\CustomLayout.cs" />

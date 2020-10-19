@@ -21,13 +21,13 @@
       <publishTime>08/27/2020 15:15:34</publishTime>
     </File>
     <File Include="bin/Api.BLL.dll">
-      <publishTime>10/19/2020 10:46:27</publishTime>
+      <publishTime>10/19/2020 13:31:01</publishTime>
     </File>
     <File Include="bin/Api.BLL.dll.config">
       <publishTime>08/27/2020 15:15:31</publishTime>
     </File>
     <File Include="bin/Api.BLL.pdb">
-      <publishTime>10/19/2020 10:46:27</publishTime>
+      <publishTime>10/19/2020 13:31:01</publishTime>
     </File>
     <File Include="bin/Api.Core.dll">
       <publishTime>10/19/2020 10:46:25</publishTime>
@@ -39,13 +39,13 @@
       <publishTime>10/19/2020 10:46:25</publishTime>
     </File>
     <File Include="bin/Api.DAL.dll">
-      <publishTime>10/19/2020 10:46:26</publishTime>
+      <publishTime>10/19/2020 13:31:01</publishTime>
     </File>
     <File Include="bin/Api.DAL.dll.config">
       <publishTime>09/23/2020 10:13:31</publishTime>
     </File>
     <File Include="bin/Api.DAL.pdb">
-      <publishTime>10/19/2020 10:46:26</publishTime>
+      <publishTime>10/19/2020 13:31:01</publishTime>
     </File>
     <File Include="bin/Api.License.dll">
       <publishTime>10/19/2020 10:46:26</publishTime>
@@ -54,13 +54,13 @@
       <publishTime>10/19/2020 10:46:26</publishTime>
     </File>
     <File Include="bin/Api.Queue.dll">
-      <publishTime>10/19/2020 10:46:26</publishTime>
+      <publishTime>10/19/2020 13:31:01</publishTime>
     </File>
     <File Include="bin/Api.Queue.dll.config">
       <publishTime>08/27/2020 15:15:33</publishTime>
     </File>
     <File Include="bin/Api.Queue.pdb">
-      <publishTime>10/19/2020 10:46:26</publishTime>
+      <publishTime>10/19/2020 13:31:01</publishTime>
     </File>
     <File Include="bin/Autofac.dll">
       <publishTime>08/27/2020 15:15:35</publishTime>
@@ -594,10 +594,10 @@
       <publishTime>09/17/2020 10:23:02</publishTime>
     </File>
     <File Include="bin/TTLXWebAPIServer.dll">
-      <publishTime>10/19/2020 10:47:10</publishTime>
+      <publishTime>10/19/2020 13:31:02</publishTime>
     </File>
     <File Include="bin/TTLXWebAPIServer.pdb">
-      <publishTime>10/19/2020 10:47:10</publishTime>
+      <publishTime>10/19/2020 13:31:02</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>08/27/2020 15:16:02</publishTime>

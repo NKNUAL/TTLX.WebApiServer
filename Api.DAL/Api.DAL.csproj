@@ -187,7 +187,7 @@
     <Compile Include="Entity_MockTestPaper_School\LocalPaperGeneralQuestion.cs" />
     <Compile Include="Entity_MockTestPaper_School\LocalPaperGeneralQuestionRelation.cs" />
     <Compile Include="Entity_MockTestPaper_School\LocalPaperQuestionRelation.cs" />
-    <Compile Include="Entity_MockTestPaper_School\LocalPaperQuestionRelation_hl.cs" />
+    <Compile Include="Entity_MockTestPaper_School\LocalPaperQuestionRelation_Nurse.cs" />
     <Compile Include="Entity_MockTestPaper_School\LocalPaperQuestions.cs" />
     <Compile Include="Entity_MockTestPaper_School\LocalPaperRecord.cs" />
     <Compile Include="Entity_MockTestPaper_School\LocalRegInfo.cs" />

@@ -1,16 +1,16 @@
-﻿using Api.Core.Logger;
+﻿using Api.Core.Extensions;
+using Api.Core.Logger;
 using Api.Core.Redis;
 using Api.DAL.DataContext;
+using Api.DAL.Entity_MockTestPaper_School;
 using Api.Queue.QueueModel;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Api.Core.Extensions;
-using System.Data.Entity;
-using Api.DAL.Entity_MockTestPaper_School;
 
 namespace Api.Queue.Impl
 {
@@ -135,8 +135,9 @@ namespace Api.Queue.Impl
 
                                         foreach (var que in know.Questions)
                                         {
-                                            var queNo = DateTime.Now.ToNormalStringWithout() + _random.Next(1000, 9999);
+                                            var queNo = DateTime.Now.ToNormalStringWithout() + _random.Next(1000, 9999) + _random.Next(10, 100);
                                             if (rule.SpecialtyId == "0")
+                                            {
                                                 db.Questionsinfo_New_Computer.Add(new Questionsinfo_New_Computer
                                                 {
                                                     sourcedoc = "UserQuestionMockPaper",
@@ -168,7 +169,9 @@ namespace Api.Queue.Impl
                                                     UseCount = 0,
                                                     VersionFlag = DateTime.Now.ToNormalStringWithout_ymd(),
                                                 });
+                                            }
                                             else
+                                            {
                                                 db.Questionsinfo_New.Add(new Questionsinfo_New
                                                 {
                                                     sourcedoc = "UserQuestionMockPaper",
@@ -200,6 +203,8 @@ namespace Api.Queue.Impl
                                                     UseCount = 0,
                                                     VersionFlag = DateTime.Now.ToNormalStringWithout_ymd()
                                                 });
+                                            }
+                                                
 
                                             db.UserQuestionMockTestPaperQuestionRelation
                                                 .Add(new UserQuestionMockTestPaperQuestionRelation

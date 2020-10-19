@@ -6,7 +6,7 @@ namespace Api.DAL.Entity_MockTestPaper_School
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class LocalPaperQuestionRelation_hl
+    public partial class LocalPaperQuestionRelation_Nurse
     {
         [Key]
         [Column(Order = 0), DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -169,8 +169,10 @@
     <Compile Include="Api\MockTestPaperController\Model\EditPaperRecord.cs" />
     <Compile Include="Api\MockTestPaperController\Model\KVModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\MockPaperInfo.cs" />
+    <Compile Include="Api\MockTestPaperController\Model\PutQuestionNurseModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\PutQuestionModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\QuestionRule.cs" />
+    <Compile Include="Api\MockTestPaperController\Model\QuestionRule_Nurse.cs" />
     <Compile Include="Api\MockTestPaperController\Model\RuleEditModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\RuleModel.cs" />
     <Compile Include="Api\MockTestPaperController\Model\UploadLocalRecord.cs" />

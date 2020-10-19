@@ -265,3 +265,4 @@ E:\git_reps\TTLX.WebApiServer\Api.Core\obj\Debug\Api.Core.csproj.CoreCompileInpu
 E:\git_reps\TTLX.WebApiServer\Api.Core\obj\Debug\Api.Core.csproj.CopyComplete
 E:\git_reps\TTLX.WebApiServer\Api.Core\obj\Debug\Api.Core.dll
 E:\git_reps\TTLX.WebApiServer\Api.Core\obj\Debug\Api.Core.pdb
+E:\Code\TTLXExamSystemMonitor\TTLXWebAPIServer\Api.Core\obj\Debug\Api.Core.csprojAssemblyReference.cache
