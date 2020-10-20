@@ -1,0 +1,4 @@
+2020-10-20 11:37:29:保存本地试题出错：An error occurred while updating the entries. See the inner exception for details.
+2020-10-20 11:37:29:pGuid:cf918272acd1408a8e2f33c73ec3b2a8
+specialtyId:5
+que:{"GeneralNo":null,"TypeId":1,"TypeName":null,"GeneralName":null,"NameImg":null,"Questions":[{"No":"71a11ac883a94fb2bdaa0fd6681c2ebf","CourseNo":null,"KnowNo":"747","QueContent":"1","QueType":1,"Option0":"1","Option1":"1","Option2":"1","Option3":"1","Option4":null,"Option5":null,"ResolutionTips":"1","Answer":"A","NameImg":null,"Option0Img":null,"Option1Img":null,"Option2Img":null,"Option3Img":null,"Option4Img":null,"Option5Img":null,"DifficultLevel":2}]}

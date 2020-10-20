@@ -6,18 +6,19 @@ namespace Api.DAL.Entity_MockTestPaper_School
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("LocalPaperQuestionRelation")]
-    public partial class LocalPaperQuestionRelation
+    [Table("UserQuestionMockTestPaperGeneralRelation")]
+    public partial class UserQuestionMockTestPaperGeneralRelation
     {
         [Key]
         [Column(Order = 0), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        public string PGuid { get; set; }
+        public int ID { get; set; }
 
 
-        public string QGuid { get; set; }
+        public string PaperID { get; set; }
 
-        public int? NurseQType { get; set; }
+        public string GeneralNo { get; set; }
+
+
+        public int OrderIndex { get; set; }
     }
 }

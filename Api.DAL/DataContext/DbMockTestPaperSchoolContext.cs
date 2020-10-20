@@ -104,6 +104,9 @@ namespace Api.DAL.DataContext
         public virtual DbSet<SysRoleMenuRelation> SysRoleMenuRelation { get; set; }
         public virtual DbSet<SysUserRoleRelation> SysUserRoleRelation { get; set; }
         public virtual DbSet<UpdateQuestionsLogs> UpdateQuestionsLogs { get; set; }
+        public virtual DbSet<UserQuestionGeneralQuestionRelation> UserQuestionGeneralQuestionRelation { get; set; }
+        public virtual DbSet<UserQuestionMockTestPaperGeneral> UserQuestionMockTestPaperGeneral { get; set; }
+        public virtual DbSet<UserQuestionMockTestPaperGeneralRelation> UserQuestionMockTestPaperGeneralRelation { get; set; }
         public virtual DbSet<UserQuestionMockTestPaper> UserQuestionMockTestPaper { get; set; }
         public virtual DbSet<UserQuestionMockTestPaperQuestionRelation> UserQuestionMockTestPaperQuestionRelation { get; set; }
         public virtual DbSet<UserQuestionRules> UserQuestionRules { get; set; }
@@ -140,7 +143,7 @@ namespace Api.DAL.DataContext
         public virtual DbSet<LocalPaperGeneralQuestion> LocalPaperGeneralQuestion { get; set; }
         public virtual DbSet<LocalPaperGeneralQuestionRelation> LocalPaperGeneralQuestionRelation { get; set; }
         public virtual DbSet<LocalPaperQuestionRelation> LocalPaperQuestionRelation { get; set; }
-        public virtual DbSet<LocalPaperQuestionRelation_Nurse> LocalPaperQuestionRelation_hl { get; set; }
+        public virtual DbSet<LocalPaperQuestionRelation_Nurse> LocalPaperQuestionRelation_Nurse { get; set; }
         public virtual DbSet<LocalPaperQuestions> LocalPaperQuestions { get; set; }
         public virtual DbSet<LocalPaperRecord> LocalPaperRecord { get; set; }
 

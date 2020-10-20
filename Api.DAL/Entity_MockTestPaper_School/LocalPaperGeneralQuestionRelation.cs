@@ -20,9 +20,6 @@ namespace Api.DAL.Entity_MockTestPaper_School
         public string QGuid { get; set; }
 
 
-        public int QueOrder { get; set; }
-
-
-        public int QType { get; set; }
+        public int OrderIndex { get; set; }
     }
 }

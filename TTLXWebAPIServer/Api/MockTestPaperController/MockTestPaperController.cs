@@ -129,7 +129,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             {
                 QuestionRule_Nurse rule = new QuestionRule_Nurse
                 {
-                    RuleNo = Guid.NewGuid().GetGuid(),
+                    RuleNo = "a185949348934d77ad09558154b49c4b",
                     RuleName = "护理专业出题规则",
                     RuleDesc = "护理专业默认规则",
                     SpecialtyId = user.FK_Specialty,
@@ -147,7 +147,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                     QueCount = 10,
                     SubQueCount = 0,
                     TypeId = 2,
-                    TypeName = "A1"
+                    TypeName = "A2"
                 });
                 rule.A_.Add(new NurseQuestionRule
                 {
@@ -783,6 +783,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             return new HttpResultModel { success = true };
         }
 
+
         /// <summary>
         /// 获取科目
         /// </summary>
@@ -1047,7 +1048,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         [Route("get/record/{userId}/{specialtyId}")]
         public HttpResultModel GetLocalPaperRecords(string userId, int specialtyId)
         {
-            if (specialtyId != 5)
+            if (specialtyId != (int)SpecialtyType.SU)
             {
                 using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
                 {
@@ -1113,7 +1114,8 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                                 QueContent = item.Question.QueContent,
                                 QueType = item.Question.QueType,
                                 ResolutionTips = item.Question.ResolutionTips,
-                                No = item.Question.QGuid
+                                No = item.Question.QGuid,
+                                DifficultLevel = item.Question.DifficultLevel
                             });
                     }
 
@@ -1122,8 +1124,165 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             }
             else//护理专业
             {
+                using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+                {
 
-                return new HttpResultModel { success = false, message = "护理专业还未实现" };
+                    Dictionary<string, EditPaperRecord_Nurse> dic_record = new Dictionary<string, EditPaperRecord_Nurse>();
+
+                    #region A1 A2题型
+                    var queryA_ = from a in dbMock.LocalPaperRecord
+                                  join b in dbMock.LocalPaperQuestionRelation on a.PGuid equals b.PGuid
+                                  join c in dbMock.LocalPaperQuestions on b.QGuid equals c.QGuid
+                                  where a.IsNormal == 0 && a.CreateUserId == userId
+                                  orderby a.PaperEditDate descending
+                                  select new
+                                  {
+                                      a.PGuid,
+                                      a.RuleNo,
+                                      a.PaperEditDate,
+                                      b.NurseQType,
+                                      Question = c
+                                  };
+                    var quesA_ = queryA_.ToList();
+
+                    foreach (var item in queryA_)
+                    {
+                        int nurseQType = item.NurseQType ?? 1;
+                        if (!dic_record.ContainsKey(item.PGuid))
+                        {
+                            dic_record.Add(item.PGuid, new EditPaperRecord_Nurse
+                            {
+                                EditDate = item.PaperEditDate,
+                                PGuid = item.PGuid,
+                                RuleNo = item.RuleNo,
+                                A_ = new List<PutQuestionA_Model>()
+                            });
+                        }
+
+                        var model = dic_record[item.PGuid].A_.Find(x => x.TypeId == nurseQType);
+
+                        if (model == null)
+                        {
+                            model = new PutQuestionA_Model
+                            {
+                                TypeId = nurseQType,
+                                Questions = new List<QuestionsInfoModel2>(),
+                            };
+                            dic_record[item.PGuid].A_.Add(model);
+                        }
+
+                        model.Questions.Add(new QuestionsInfoModel2
+                        {
+                            Answer = item.Question.Answer,
+                            NameImg = item.Question.NameImg,
+                            Option0 = item.Question.Option0,
+                            Option0Img = item.Question.option0Img,
+                            Option1 = item.Question.Option1,
+                            Option1Img = item.Question.option1Img,
+                            Option2 = item.Question.Option2,
+                            Option2Img = item.Question.option2Img,
+                            Option3 = item.Question.Option3,
+                            Option3Img = item.Question.option3Img,
+                            Option4 = item.Question.Option4,
+                            Option4Img = item.Question.option4Img,
+                            Option5 = item.Question.Option5,
+                            Option5Img = item.Question.option5Img,
+                            QueContent = item.Question.QueContent,
+                            QueType = item.Question.QueType,
+                            ResolutionTips = item.Question.ResolutionTips,
+                            No = item.Question.QGuid,
+                            DifficultLevel = item.Question.DifficultLevel,
+                            CourseNo = item.Question.CourseNo,
+                            KnowNo = item.Question.KnowNo,
+                        });
+                    }
+                    #endregion
+
+                    #region A3题型
+                    var queryA3 = from a in dbMock.LocalPaperRecord
+                                  join b in dbMock.LocalPaperQuestionRelation_Nurse on a.PGuid equals b.PGuid
+                                  join c in dbMock.LocalPaperGeneralQuestion on b.GGuid equals c.GGuid
+                                  join d in dbMock.LocalPaperGeneralQuestionRelation on c.GGuid equals d.GGuid
+                                  join e in dbMock.LocalPaperQuestions on d.QGuid equals e.QGuid
+                                  where a.IsNormal == 0 && a.CreateUserId == userId
+                                  orderby a.PaperEditDate descending
+                                  select new
+                                  {
+                                      a.PGuid,
+                                      a.RuleNo,
+                                      a.PaperEditDate,
+                                      NurseQType = 3,
+                                      General = c,
+                                      Question = e
+                                  };
+
+                    var quesA3 = queryA3.ToList();
+
+                    foreach (var item in quesA3)
+                    {
+                        if (!dic_record.ContainsKey(item.PGuid))
+                        {
+                            dic_record.Add(item.PGuid, new EditPaperRecord_Nurse
+                            {
+                                A_ = new List<PutQuestionA_Model>(),
+                                EditDate = item.PaperEditDate,
+                                PGuid = item.PGuid,
+                                RuleNo = item.RuleNo
+                            });
+                        }
+
+                        var model = dic_record[item.PGuid].A_.Find(x => x.TypeId == item.NurseQType && x.GeneralNo == item.General.GGuid);
+
+                        if (model == null)
+                        {
+                            model = new PutQuestionA_Model
+                            {
+                                TypeId = item.NurseQType,
+                                GeneralNo = item.General.GGuid,
+                                GeneralName = item.General.GeneralQueName,
+                                NameImg = item.General.NameImg,
+                                Questions = new List<QuestionsInfoModel2>(),
+                            };
+                            dic_record[item.PGuid].A_.Add(model);
+                        }
+
+                        model.Questions.Add(new QuestionsInfoModel2
+                        {
+                            Answer = item.Question.Answer,
+                            NameImg = item.Question.NameImg,
+                            Option0 = item.Question.Option0,
+                            Option0Img = item.Question.option0Img,
+                            Option1 = item.Question.Option1,
+                            Option1Img = item.Question.option1Img,
+                            Option2 = item.Question.Option2,
+                            Option2Img = item.Question.option2Img,
+                            Option3 = item.Question.Option3,
+                            Option3Img = item.Question.option3Img,
+                            Option4 = item.Question.Option4,
+                            Option4Img = item.Question.option4Img,
+                            Option5 = item.Question.Option5,
+                            Option5Img = item.Question.option5Img,
+                            QueContent = item.Question.QueContent,
+                            QueType = item.Question.QueType,
+                            ResolutionTips = item.Question.ResolutionTips,
+                            No = item.Question.QGuid,
+                            DifficultLevel = item.Question.DifficultLevel,
+                            CourseNo = item.Question.CourseNo,
+                            KnowNo = item.Question.KnowNo,
+                        });
+
+                    }
+
+                    #endregion
+
+                    return new HttpResultModel { success = true, data = dic_record.Values.ToList() };
+
+                }
+
+
+
+
+
             }
         }
 
@@ -1135,7 +1294,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         /// <returns></returns>
         [HttpGet]
         [Route("save/record/{userId}")]
-        public async void SaveLocalPaper(string userId, string pGuid, string ruleNo)
+        public async void SaveLocalPaperAsync(string userId, string pGuid, string ruleNo)
         {
             using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
@@ -1167,7 +1326,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         /// </summary>
         [HttpPost]
         [Route("save/question/{pGuid}/{specialtyId}/{courseNo}/{knowNo}")]
-        public async void SaveLocalQuestion(string pGuid, int specialtyId, string courseNo, string knowNo, QuestionsInfoModel info)
+        public async void SaveLocalQuestionAsync(string pGuid, int specialtyId, string courseNo, string knowNo, QuestionsInfoModel info)
         {
             using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
@@ -1237,12 +1396,194 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         }
 
         /// <summary>
+        /// 保存本地题目---护理专业
+        /// </summary>
+        [HttpPost]
+        [Route("save/question/{pGuid}/{specialtyId}/{editType}")]
+        public async void SaveLocalQuestion_NurseAsync(string pGuid, int specialtyId, int editType, PutQuestionA_Model info)
+        {
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+            {
+                try
+                {
+
+                    if (info.TypeId == 3)//A3
+                    {
+                        if (editType == 1)//新增
+                        {
+                            dbMock.LocalPaperGeneralQuestion.Add(new LocalPaperGeneralQuestion
+                            {
+                                GGuid = info.GeneralNo,
+                                SpecialtyId = specialtyId,
+                                GeneralQueName = info.GeneralName,
+                                NameImg = (info.NameImg == null || info.NameImg.Length == 0) ? null : info.NameImg
+                            });
+
+                            dbMock.LocalPaperQuestionRelation_Nurse.Add(new LocalPaperQuestionRelation_Nurse
+                            {
+                                PGuid = pGuid,
+                                GGuid = info.GeneralNo
+                            });
+
+                            await dbMock.SaveChangesAsync();
+
+                            int index = 1;
+                            foreach (var que in info.Questions)
+                            {
+                                dbMock.LocalPaperQuestions.Add(new LocalPaperQuestions
+                                {
+                                    Answer = que.Answer,
+                                    CourseNo = que.CourseNo,
+                                    DifficultLevel = que.DifficultLevel,
+                                    KnowNo = que.KnowNo,
+                                    NameImg = que.NameImg,
+                                    Option0 = que.Option0,
+                                    option0Img = que.Option0Img,
+                                    Option1 = que.Option1,
+                                    option1Img = que.Option1Img,
+                                    Option2 = que.Option2,
+                                    option2Img = que.Option2Img,
+                                    Option3 = que.Option3,
+                                    option3Img = que.Option3Img,
+                                    QGuid = que.No,
+                                    QueContent = que.QueContent,
+                                    QueType = que.QueType,
+                                    ResolutionTips = que.ResolutionTips,
+                                });
+
+                                dbMock.LocalPaperGeneralQuestionRelation.Add(new LocalPaperGeneralQuestionRelation
+                                {
+                                    GGuid = info.GeneralNo,
+                                    QGuid = que.No,
+                                    OrderIndex = index++
+                                });
+                            }
+                            await dbMock.SaveChangesAsync();
+
+                        }
+                        else if (editType == 2)
+                        {
+                            var general = await dbMock.LocalPaperGeneralQuestion
+                                .FirstOrDefaultAsync(p => p.GGuid == info.GeneralNo);
+
+                            if (general == null)
+                                return;
+
+                            general.GeneralQueName = info.GeneralName;
+                            general.NameImg = (info.NameImg == null || info.NameImg.Length == 0) ? null : info.NameImg;
+                            await dbMock.SaveChangesAsync();
+                            if (info.Questions == null)
+                                return;
+
+                            foreach (var item in info.Questions)
+                            {
+                                var que = dbMock.LocalPaperQuestions.FirstOrDefault(q => q.QGuid == item.No);
+
+                                if (que != null)
+                                {
+                                    que.Answer = item.Answer;
+                                    que.Option0 = item.Option0;
+                                    que.option0Img = item.Option0Img;
+                                    que.Option1 = item.Option1;
+                                    que.option1Img = item.Option1Img;
+                                    que.Option2 = item.Option2;
+                                    que.option2Img = item.Option2Img;
+                                    que.Option3 = item.Option3;
+                                    que.option3Img = item.Option3Img;
+                                    que.QueContent = item.QueContent;
+                                    que.NameImg = item.NameImg;
+                                    que.QueType = item.QueType;
+                                    que.ResolutionTips = item.ResolutionTips;
+                                    que.DifficultLevel = item.DifficultLevel;
+                                    que.KnowNo = item.KnowNo;
+                                    que.CourseNo = item.CourseNo;
+                                }
+                            }
+                            await dbMock.SaveChangesAsync();
+                        }
+
+                    }
+                    else //A1 A2
+                    {
+                        if (info.Questions != null)
+                        {
+                            foreach (var item in info.Questions)
+                            {
+                                if (editType == 1)
+                                {
+                                    dbMock.LocalPaperQuestions.Add(new LocalPaperQuestions
+                                    {
+                                        Answer = item.Answer,
+                                        CourseNo = item.CourseNo,
+                                        DifficultLevel = item.DifficultLevel,
+                                        KnowNo = item.KnowNo,
+                                        NameImg = item.NameImg,
+                                        Option0 = item.Option0,
+                                        option0Img = item.Option0Img,
+                                        Option1 = item.Option1,
+                                        option1Img = item.Option1Img,
+                                        Option2 = item.Option2,
+                                        option2Img = item.Option2Img,
+                                        Option3 = item.Option3,
+                                        option3Img = item.Option3Img,
+                                        QGuid = item.No,
+                                        QueContent = item.QueContent,
+                                        QueType = item.QueType,
+                                        ResolutionTips = item.ResolutionTips,
+                                    });
+
+                                    dbMock.LocalPaperQuestionRelation.Add(new LocalPaperQuestionRelation
+                                    {
+                                        PGuid = pGuid,
+                                        QGuid = item.No,
+                                        NurseQType = info.TypeId
+                                    });
+
+                                    await dbMock.SaveChangesAsync();
+                                }
+                                else
+                                {
+                                    var que = dbMock.LocalPaperQuestions.FirstOrDefault(q => q.QGuid == item.No);
+                                    que.Answer = item.Answer;
+                                    que.Option0 = item.Option0;
+                                    que.option0Img = item.Option0Img;
+                                    que.Option1 = item.Option1;
+                                    que.option1Img = item.Option1Img;
+                                    que.Option2 = item.Option2;
+                                    que.option2Img = item.Option2Img;
+                                    que.Option3 = item.Option3;
+                                    que.option3Img = item.Option3Img;
+                                    que.QueContent = item.QueContent;
+                                    que.NameImg = item.NameImg;
+                                    que.QueType = item.QueType;
+                                    que.ResolutionTips = item.ResolutionTips;
+                                    que.DifficultLevel = item.DifficultLevel;
+                                    que.KnowNo = item.KnowNo;
+                                    que.CourseNo = item.CourseNo;
+                                    await dbMock.SaveChangesAsync();
+                                }
+
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogContent.Instance.WriteLog("保存本地试题出错：" + ex.Message, Log4NetLevel.Error);
+                    string content = string.Format("pGuid:{0}\r\nspecialtyId:{1}\r\nque:{2}",
+                        pGuid, specialtyId, Newtonsoft.Json.JsonConvert.SerializeObject(info));
+                    LogContent.Instance.WriteLog(content, Log4NetLevel.Info);
+                }
+            }
+        }
+
+        /// <summary>
         /// 删除本地编辑记录
         /// </summary>
         /// <param name="pGuid"></param>
         [HttpGet]
         [Route("del/record/{pGuid}")]
-        public async void DeleteLocalRecord(string pGuid)
+        public async void DeleteLocalRecordAsync(string pGuid)
         {
             using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {

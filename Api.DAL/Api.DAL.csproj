@@ -235,7 +235,10 @@
     <Compile Include="Entity_MockTestPaper_School\TimuDetail.cs" />
     <Compile Include="Entity_MockTestPaper_School\TimuDetailScorePoint.cs" />
     <Compile Include="Entity_MockTestPaper_School\UpdateQuestionsLogs.cs" />
+    <Compile Include="Entity_MockTestPaper_School\UserQuestionGeneralQuestionRelation.cs" />
     <Compile Include="Entity_MockTestPaper_School\UserQuestionMockTestPaper.cs" />
+    <Compile Include="Entity_MockTestPaper_School\UserQuestionMockTestPaperGeneral.cs" />
+    <Compile Include="Entity_MockTestPaper_School\UserQuestionMockTestPaperGeneralRelation.cs" />
     <Compile Include="Entity_MockTestPaper_School\UserQuestionMockTestPaperQuestionRelation.cs" />
     <Compile Include="Entity_MockTestPaper_School\UserQuestionRules.cs" />
     <Compile Include="Entity_MockTestPaper_School\UserQuestionRules_Course_Relation.cs" />
