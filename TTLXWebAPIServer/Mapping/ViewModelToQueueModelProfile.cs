@@ -21,6 +21,11 @@ namespace TTLXWebAPIServer.Mapping
             CreateMap<PutQuestionCourseModel, PutQuestionCourseQueueModel>();
             CreateMap<PutQuestionKnowModel, PutQuestionKnowQueueModel>();
             CreateMap<QuestionsInfoModel, QuestionsInfoQueueModel>();
+
+            CreateMap<PutQuestionNurseModel, MockTestPaperNurseQueueModel>();
+            CreateMap<PutQuestionA_Model, PutQuestionA_QueueModel>();
+            CreateMap<QuestionsInfoModel2, QuestionsInfoQueueModel2>();
+
         }
     }
 }

@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="GlabolDataExe.cs" />
     <Compile Include="Impl\ErrorQuestionQueueData.cs" />
+    <Compile Include="Impl\MockTestPaperNurseQueueData.cs" />
     <Compile Include="Impl\PaperQuestionQueueData.cs" />
     <Compile Include="Impl\MockTestPaperQueueData.cs" />
     <Compile Include="Impl\PhoneUserQueueData.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueDataType.cs" />
     <Compile Include="QueueModel\ErrorQuestionQueueModel.cs" />
+    <Compile Include="QueueModel\MockTestPaperNurseQueueModel.cs" />
     <Compile Include="QueueModel\MockTestPaperQueueModel.cs" />
     <Compile Include="QueueModel\PaperUploadQueueModel.cs" />
     <Compile Include="QueueModel\UploadUserQueueModel.cs" />

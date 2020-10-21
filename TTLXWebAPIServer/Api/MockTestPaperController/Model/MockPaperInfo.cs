@@ -20,7 +20,19 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController.Model
         public int DuoxuanNum { get; set; }
         public int PanduanNum { get; set; }
     }
-
+    public class MockPaperNurseInfo
+    {
+        public int PaperId { get; set; }
+        public string PaperName { get; set; }
+        public string PaperCreateDate { get; set; }
+        public string CreateUserId { get; set; }
+        public string CreateUserName { get; set; }
+        public string SpecialtyId { get; set; }
+        public string SpecialtyName { get; set; }
+        public int A1Num { get; set; }
+        public int A2Num { get; set; }
+        public int A3Num { get; set; }
+    }
 
     public class MockPaperCourseTreeModel
     {
@@ -37,7 +49,6 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController.Model
         public int QueCount { get; set; }
         public List<QuestionsInfoModel> Questions { get; set; }
     }
-
 
     public class QuestionsInfoModel
     {
@@ -61,4 +72,7 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController.Model
         public byte[] Option5Img { get; set; }
         public int DifficultLevel { get; set; }
     }
+
+
+
 }

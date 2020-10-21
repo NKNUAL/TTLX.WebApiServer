@@ -13,5 +13,6 @@ namespace Api.Queue
         ErrorQuestions,
         SharePaperUpload,
         MockTestPaper,
+        MockTestPaperNurse,
     }
 }

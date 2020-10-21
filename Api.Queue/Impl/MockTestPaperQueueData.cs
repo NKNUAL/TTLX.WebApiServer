@@ -179,7 +179,7 @@ namespace Api.Queue.Impl
                                                     FK_SpecialtyType = rule.SpecialtyId,
                                                     CreateTime = mock_paper.ExamPaperCreateTime,
                                                     CreateUserName = data.UserName,
-                                                    DifficultLevel = 1,
+                                                    DifficultLevel = que.DifficultLevel,
                                                     FK_CourseType = course.CourseNo,
                                                     FK_KnowledgePoint = know.KnowNo,
                                                     IsDelete = 0,

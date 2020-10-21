@@ -12,6 +12,7 @@ using AutoMapper;
 using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -398,8 +399,8 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("get/paper/{userId}")]
-        public HttpResultModel GetUserMockPaper(string userId, string ruleNo)
+        [Route("get/paper/{userId}/{specialtyId}")]
+        public HttpResultModel GetUserMockPaper(string userId, int specialtyId, string ruleNo)
         {
 
             if (string.IsNullOrEmpty(userId))
@@ -407,36 +408,58 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
 
             using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
+                if (specialtyId == (int)SpecialtyType.SU)
+                {
+                    var papers = dbMock.UserQuestionMockTestPaper.Where(q => q.CreateUserID == userId)
+                        .Select(q => new MockPaperNurseInfo
+                        {
+                            A1Num = 35,
+                            A2Num = 10,
+                            A3Num = 5,
+                            SpecialtyId = q.FK_Specialty.ToString(),
+                            SpecialtyName = "护理专业",
+                            CreateUserId = q.CreateUserID,
+                            CreateUserName = q.CreateUserName,
+                            PaperCreateDate = q.ExamPaperCreateTime,
+                            PaperId = q.ExamPaperID,
+                            PaperName = q.ExamPaperName
+                        }).ToList();
 
-                var query = (from a in dbMock.UserQuestionMockTestPaper
-                             join b in dbMock.Base_specialtyType
-                             on a.FK_Specialty.ToString() equals b.No
-                             join c in dbMock.UserQuestionRules
-                             on a.RuleNo equals c.RuleNo
-                             where a.CreateUserID == userId
-                             select new MockPaperInfo
-                             {
-                                 SpecialtyId = a.FK_Specialty.ToString(),
-                                 SpecialtyName = b.Name,
-                                 CreateUserId = a.CreateUserID,
-                                 CreateUserName = a.CreateUserName,
-                                 PaperCreateDate = a.ExamPaperCreateTime,
-                                 PaperName = a.ExamPaperName,
-                                 RuleNo = a.RuleNo,
-                                 PaperId = a.ExamPaperID,
-                                 RuleName = c.RuleName,
-                                 DanxuanNum = (int)(a.danxuanNum ?? 0),
-                                 DuoxuanNum = (int)(a.duoxuanNum),
-                                 PanduanNum = (int)(a.panduanNum)
-                             });
+                    return new HttpResultModel { success = true, data = papers };
+                }
+                else
+                {
+                    var query = (from a in dbMock.UserQuestionMockTestPaper
+                                 join b in dbMock.Base_specialtyType
+                                 on a.FK_Specialty.ToString() equals b.No
+                                 join c in dbMock.UserQuestionRules
+                                 on a.RuleNo equals c.RuleNo
+                                 where a.CreateUserID == userId
+                                 select new MockPaperInfo
+                                 {
+                                     SpecialtyId = a.FK_Specialty.ToString(),
+                                     SpecialtyName = b.Name,
+                                     CreateUserId = a.CreateUserID,
+                                     CreateUserName = a.CreateUserName,
+                                     PaperCreateDate = a.ExamPaperCreateTime,
+                                     PaperName = a.ExamPaperName,
+                                     RuleNo = a.RuleNo,
+                                     PaperId = a.ExamPaperID,
+                                     RuleName = c.RuleName,
+                                     DanxuanNum = (int)(a.danxuanNum ?? 0),
+                                     DuoxuanNum = (int)(a.duoxuanNum),
+                                     PanduanNum = (int)(a.panduanNum)
+                                 });
 
-                if (!string.IsNullOrEmpty(ruleNo))
-                    query = query.Where(m => m.RuleNo == ruleNo);
+                    if (!string.IsNullOrEmpty(ruleNo))
+                        query = query.Where(m => m.RuleNo == ruleNo);
 
-                List<MockPaperInfo> paperInfos =
-                    query.OrderByDescending(q => q.PaperCreateDate).ToList();
+                    List<MockPaperInfo> paperInfos =
+                        query.OrderByDescending(q => q.PaperCreateDate).ToList();
 
-                return new HttpResultModel { success = true, data = paperInfos };
+                    return new HttpResultModel { success = true, data = paperInfos };
+                }
+
             }
         }
 
@@ -465,99 +488,211 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                 if (paper == null)
                     return new HttpResultModel { success = false, message = "未查询试卷" };
 
-                if (paper.FK_Specialty == 0)
+
+                if (paper.FK_Specialty == (int)SpecialtyType.SU)
                 {
-                    var ques = (from a in dbMock.UserQuestionMockTestPaperQuestionRelation
-                                join b in dbMock.Questionsinfo_New_Computer
-                                on a.QuestionID equals b.No
-                                where a.PaperID == paperId.ToString()
-                                && new int[] { 1, 2, 3 }.Contains(a.QuestionType ?? 1)//只取选择题
-                                && b.sourcedoc == "UserQuestionMockPaper"
-                                orderby a.OrderIndex
-                                select b).ToList();
+                    List<PutQuestionA_Model> A_ = new List<PutQuestionA_Model>();
 
-                    foreach (var que in ques)
+                    #region A1 A2题型
+                    var quesA_ = (from a in dbMock.UserQuestionMockTestPaperQuestionRelation
+                                  join b in dbMock.Questionsinfo_New on a.QuestionID equals b.No
+                                  where a.PaperID == paperId.ToString() && b.sourcedoc == "UserQuestionMockPaper"
+                                  orderby a.OrderIndex
+                                  select new { NurseQType = a.QuestionType, Question = b }).ToList();
+
+                    foreach (var que in quesA_)
                     {
-                        if (!dicQues.ContainsKey(que.FK_CourseType))
-                            dicQues.Add(que.FK_CourseType, new Dictionary<string, List<QuestionsInfoModel>>());
-
-                        if (!dicQues[que.FK_CourseType].ContainsKey(que.FK_KnowledgePoint))
-                            dicQues[que.FK_CourseType].Add(que.FK_KnowledgePoint, new List<QuestionsInfoModel>());
-
-                        dicQues[que.FK_CourseType][que.FK_KnowledgePoint].Add(new QuestionsInfoModel
+                        var model = A_.Find(x => x.TypeId == que.NurseQType);
+                        if (model == null)
                         {
-                            Answer = que.StandardAnwser,
-                            NameImg = que.nameImg,
-                            No = que.No,
-                            Option0 = que.Option0,
-                            Option0Img = que.option0Img,
-                            Option1 = que.Option1,
-                            Option1Img = que.option1Img,
-                            Option2 = que.Option2,
-                            Option2Img = que.option2Img,
-                            Option3 = que.Option3,
-                            Option3Img = que.option3Img,
-                            Option4 = que.Option4,
-                            Option4Img = que.option4Img,
-                            Option5 = que.Option5,
-                            Option5Img = que.option5Img,
-                            QueContent = que.Name,
-                            QueType = que.Type ?? 1,
-                            ResolutionTips = que.ResolutionTips,
+                            model = new PutQuestionA_Model
+                            {
+                                TypeId = que.NurseQType ?? 1,
+                                Questions = new List<QuestionsInfoModel2>(),
+                            };
+                            A_.Add(model);
+                        }
+                        model.Questions.Add(new QuestionsInfoModel2
+                        {
+                            Answer = que.Question.StandardAnwser,
+                            NameImg = que.Question.nameImg,
+                            No = que.Question.No,
+                            Option0 = que.Question.Option0,
+                            Option0Img = que.Question.option0Img,
+                            Option1 = que.Question.Option1,
+                            Option1Img = que.Question.option1Img,
+                            Option2 = que.Question.Option2,
+                            Option2Img = que.Question.option2Img,
+                            Option3 = que.Question.Option3,
+                            Option3Img = que.Question.option3Img,
+                            Option4 = que.Question.Option4,
+                            Option4Img = que.Question.option4Img,
+                            Option5 = que.Question.Option5,
+                            Option5Img = que.Question.option5Img,
+                            QueContent = que.Question.Name,
+                            QueType = que.Question.Type ?? 1,
+                            ResolutionTips = que.Question.ResolutionTips,
+                            DifficultLevel = que.Question.DifficultLevel ?? 1,
+                            CourseNo = que.Question.FK_CourseType,
+                            KnowNo = que.Question.FK_KnowledgePoint,
                         });
-
                     }
+                    #endregion
 
+                    #region A3题型
+                    var queA3 = (from a in dbMock.UserQuestionMockTestPaperGeneralRelation
+                                 join b in dbMock.UserQuestionMockTestPaperGeneral
+                                 on a.GeneralNo equals b.GeneralNo
+                                 join c in dbMock.UserQuestionGeneralQuestionRelation
+                                 on b.GeneralNo equals c.GeneralNo
+                                 join d in dbMock.Questionsinfo_New on c.QueNo equals d.No
+                                 where a.PaperID == paperId.ToString()
+                                 orderby a.OrderIndex, c.OrderIndex
+                                 select new
+                                 {
+                                     G_OrderIndex = a.OrderIndex,
+                                     Gerenal = b,
+                                     Q_OrderIndex = c.OrderIndex,
+                                     Question = d,
+                                     NurseQType = 3,
+                                 }).ToList();
+
+                    foreach (var que in queA3)
+                    {
+                        var model = A_.Find(x => x.GeneralNo == que.Gerenal.GeneralNo);
+                        if (model == null)
+                        {
+                            model = new PutQuestionA_Model
+                            {
+                                GeneralNo = que.Gerenal.GeneralNo,
+                                GeneralName = que.Gerenal.GeneralQueName,
+                                NameImg = que.Gerenal.NameImg,
+                                Questions = new List<QuestionsInfoModel2>(),
+                                TypeId = que.NurseQType,
+                            };
+                            A_.Add(model);
+                        }
+
+                        model.Questions.Add(new QuestionsInfoModel2
+                        {
+                            Answer = que.Question.StandardAnwser,
+                            NameImg = que.Question.nameImg,
+                            No = que.Question.No,
+                            Option0 = que.Question.Option0,
+                            Option0Img = que.Question.option0Img,
+                            Option1 = que.Question.Option1,
+                            Option1Img = que.Question.option1Img,
+                            Option2 = que.Question.Option2,
+                            Option2Img = que.Question.option2Img,
+                            Option3 = que.Question.Option3,
+                            Option3Img = que.Question.option3Img,
+                            Option4 = que.Question.Option4,
+                            Option4Img = que.Question.option4Img,
+                            Option5 = que.Question.Option5,
+                            Option5Img = que.Question.option5Img,
+                            QueContent = que.Question.Name,
+                            QueType = que.Question.Type ?? 1,
+                            ResolutionTips = que.Question.ResolutionTips,
+                            DifficultLevel = que.Question.DifficultLevel ?? 1,
+                            CourseNo = que.Question.FK_CourseType,
+                            KnowNo = que.Question.FK_KnowledgePoint,
+                        });
+                    }
+                    #endregion
+
+                    return new HttpResultModel { success = true, data = A_ };
                 }
                 else
                 {
-                    var aaa = from a in dbMock.UserQuestionMockTestPaperQuestionRelation
-                              join b in dbMock.Questionsinfo_New on a.QuestionID equals b.No
-                              where a.PaperID == paperId.ToString()
-                              && new int[] { 1, 2, 3 }.Contains(a.QuestionType ?? 1)//只取选择题
-                              && b.sourcedoc == "UserQuestionMockPaper"
-                              orderby a.OrderIndex
-                              select b;
-                    var ques = (from a in dbMock.UserQuestionMockTestPaperQuestionRelation
-                                join b in dbMock.Questionsinfo_New on a.QuestionID equals b.No
-                                where a.PaperID == paperId.ToString()
-                                && new int[] { 1, 2, 3 }.Contains(a.QuestionType ?? 1)//只取选择题
-                                && b.sourcedoc == "UserQuestionMockPaper"
-                                orderby a.OrderIndex
-                                select b).ToList();
-
-                    foreach (var que in ques)
+                    if (paper.FK_Specialty == 0)
                     {
-                        if (!dicQues.ContainsKey(que.FK_CourseType))
-                            dicQues.Add(que.FK_CourseType, new Dictionary<string, List<QuestionsInfoModel>>());
+                        var ques = (from a in dbMock.UserQuestionMockTestPaperQuestionRelation
+                                    join b in dbMock.Questionsinfo_New_Computer
+                                    on a.QuestionID equals b.No
+                                    where a.PaperID == paperId.ToString()
+                                    && new int[] { 1, 2, 3 }.Contains(a.QuestionType ?? 1)//只取选择题
+                                    && b.sourcedoc == "UserQuestionMockPaper"
+                                    orderby a.OrderIndex
+                                    select b).ToList();
 
-                        if (!dicQues[que.FK_CourseType].ContainsKey(que.FK_KnowledgePoint))
-                            dicQues[que.FK_CourseType].Add(que.FK_KnowledgePoint, new List<QuestionsInfoModel>());
-
-                        dicQues[que.FK_CourseType][que.FK_KnowledgePoint].Add(new QuestionsInfoModel
+                        foreach (var que in ques)
                         {
-                            Answer = que.StandardAnwser,
-                            NameImg = que.nameImg,
-                            No = que.No,
-                            Option0 = que.Option0,
-                            Option0Img = que.option0Img,
-                            Option1 = que.Option1,
-                            Option1Img = que.option1Img,
-                            Option2 = que.Option2,
-                            Option2Img = que.option2Img,
-                            Option3 = que.Option3,
-                            Option3Img = que.option3Img,
-                            Option4 = que.Option4,
-                            Option4Img = que.option4Img,
-                            Option5 = que.Option5,
-                            Option5Img = que.option5Img,
-                            QueContent = que.Name,
-                            QueType = que.Type ?? 1,
-                            ResolutionTips = que.ResolutionTips,
-                        });
+                            if (!dicQues.ContainsKey(que.FK_CourseType))
+                                dicQues.Add(que.FK_CourseType, new Dictionary<string, List<QuestionsInfoModel>>());
+
+                            if (!dicQues[que.FK_CourseType].ContainsKey(que.FK_KnowledgePoint))
+                                dicQues[que.FK_CourseType].Add(que.FK_KnowledgePoint, new List<QuestionsInfoModel>());
+
+                            dicQues[que.FK_CourseType][que.FK_KnowledgePoint].Add(new QuestionsInfoModel
+                            {
+                                Answer = que.StandardAnwser,
+                                NameImg = que.nameImg,
+                                No = que.No,
+                                Option0 = que.Option0,
+                                Option0Img = que.option0Img,
+                                Option1 = que.Option1,
+                                Option1Img = que.option1Img,
+                                Option2 = que.Option2,
+                                Option2Img = que.option2Img,
+                                Option3 = que.Option3,
+                                Option3Img = que.option3Img,
+                                Option4 = que.Option4,
+                                Option4Img = que.option4Img,
+                                Option5 = que.Option5,
+                                Option5Img = que.option5Img,
+                                QueContent = que.Name,
+                                QueType = que.Type ?? 1,
+                                ResolutionTips = que.ResolutionTips,
+                            });
+
+                        }
 
                     }
+                    else
+                    {
+                        var ques = (from a in dbMock.UserQuestionMockTestPaperQuestionRelation
+                                    join b in dbMock.Questionsinfo_New on a.QuestionID equals b.No
+                                    where a.PaperID == paperId.ToString()
+                                    && new int[] { 1, 2, 3 }.Contains(a.QuestionType ?? 1)//只取选择题
+                                    && b.sourcedoc == "UserQuestionMockPaper"
+                                    orderby a.OrderIndex
+                                    select b).ToList();
+
+                        foreach (var que in ques)
+                        {
+                            if (!dicQues.ContainsKey(que.FK_CourseType))
+                                dicQues.Add(que.FK_CourseType, new Dictionary<string, List<QuestionsInfoModel>>());
+
+                            if (!dicQues[que.FK_CourseType].ContainsKey(que.FK_KnowledgePoint))
+                                dicQues[que.FK_CourseType].Add(que.FK_KnowledgePoint, new List<QuestionsInfoModel>());
+
+                            dicQues[que.FK_CourseType][que.FK_KnowledgePoint].Add(new QuestionsInfoModel
+                            {
+                                Answer = que.StandardAnwser,
+                                NameImg = que.nameImg,
+                                No = que.No,
+                                Option0 = que.Option0,
+                                Option0Img = que.option0Img,
+                                Option1 = que.Option1,
+                                Option1Img = que.option1Img,
+                                Option2 = que.Option2,
+                                Option2Img = que.option2Img,
+                                Option3 = que.Option3,
+                                Option3Img = que.option3Img,
+                                Option4 = que.Option4,
+                                Option4Img = que.option4Img,
+                                Option5 = que.Option5,
+                                Option5Img = que.option5Img,
+                                QueContent = que.Name,
+                                QueType = que.Type ?? 1,
+                                ResolutionTips = que.ResolutionTips,
+                            });
+
+                        }
+                    }
                 }
+
+
             }
 
             var dic_course = _baseService
@@ -709,8 +844,28 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
             GlabolDataExe.Instance.AddData(QueueDataType.MockTestPaper, uploadModel);
 
             return new HttpResultModel { success = true };
-
         }
+
+        /// <summary>
+        /// 添加模拟试卷
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="put"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("put/paper_nurse")]
+        public HttpResultModel PutPaper_Nurse(PutQuestionNurseModel put)
+        {
+            if (put == null)
+                return new HttpResultModel { success = false, message = "题目为空" };
+
+
+            var uploadModel = Mapper.Map<MockTestPaperNurseQueueModel>(put);
+            GlabolDataExe.Instance.AddData(QueueDataType.MockTestPaperNurse, uploadModel);
+
+            return new HttpResultModel { success = true };
+        }
+
 
         /// <summary>
         /// 修改题目内容
@@ -720,64 +875,166 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
         [Route("edit/question/{specialtyId}")]
         public HttpResultModel EditPaper(string specialtyId, QuestionsInfoModel que)
         {
+            string isAllow = ConfigurationManager.AppSettings["isAllowModiftQue"];
+
+            if (isAllow == "false")
+            {
+                return new HttpResultModel { success = false, message = "当前不允许修改试题" };
+            }
+
             if (string.IsNullOrEmpty(specialtyId) || que is null)
                 return new HttpResultModel { success = false, message = "参数异常" };
 
             using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
             {
-                if (specialtyId == "0")
+                try
                 {
-                    var que_query = dbMock.Questionsinfo_New_Computer
-                        .FirstOrDefault(q => q.sourcedoc == "UserQuestionMockPaper" && q.No == que.No);
-
-                    if (que_query == null)
+                    if (specialtyId == "0")
                     {
-                        return new HttpResultModel { success = false, message = "试题不存在" };
-                    }
-
-                    que_query.Name = que.QueContent;
-                    que_query.nameImg = que.NameImg;
-                    que_query.Option0 = que.Option0;
-                    que_query.option0Img = que.Option0Img;
-                    que_query.Option1 = que.Option1;
-                    que_query.option1Img = que.Option1Img;
-                    que_query.Option2 = que.Option2;
-                    que_query.option2Img = que.Option2Img;
-                    que_query.Option3 = que.Option3;
-                    que_query.option3Img = que.Option3Img;
-                    que_query.StandardAnwser = que.Answer;
-                    que_query.ResolutionTips = que.ResolutionTips;
-                    que_query.Type = que.QueType;
-                    que_query.DifficultLevel = que.DifficultLevel;
-
-                    dbMock.SaveChanges();
-                }
-                else
-                {
-                    var que_query = dbMock.Questionsinfo_New
+                        var que_query = dbMock.Questionsinfo_New_Computer
                             .FirstOrDefault(q => q.sourcedoc == "UserQuestionMockPaper" && q.No == que.No);
 
-                    if (que_query == null)
+                        if (que_query == null)
+                        {
+                            return new HttpResultModel { success = false, message = "试题不存在" };
+                        }
+
+                        que_query.Name = que.QueContent;
+                        que_query.nameImg = que.NameImg;
+                        que_query.Option0 = que.Option0;
+                        que_query.option0Img = que.Option0Img;
+                        que_query.Option1 = que.Option1;
+                        que_query.option1Img = que.Option1Img;
+                        que_query.Option2 = que.Option2;
+                        que_query.option2Img = que.Option2Img;
+                        que_query.Option3 = que.Option3;
+                        que_query.option3Img = que.Option3Img;
+                        que_query.StandardAnwser = que.Answer;
+                        que_query.ResolutionTips = que.ResolutionTips;
+                        que_query.Type = que.QueType;
+                        que_query.DifficultLevel = que.DifficultLevel;
+
+                        dbMock.SaveChanges();
+                    }
+                    else
                     {
-                        return new HttpResultModel { success = false, message = "试题不存在" };
+                        var que_query = dbMock.Questionsinfo_New
+                                .FirstOrDefault(q => q.sourcedoc == "UserQuestionMockPaper" && q.No == que.No);
+
+                        if (que_query == null)
+                        {
+                            return new HttpResultModel { success = false, message = "试题不存在" };
+                        }
+
+                        que_query.Name = que.QueContent;
+                        que_query.nameImg = que.NameImg;
+                        que_query.Option0 = que.Option0;
+                        que_query.option0Img = que.Option0Img;
+                        que_query.Option1 = que.Option1;
+                        que_query.option1Img = que.Option1Img;
+                        que_query.Option2 = que.Option2;
+                        que_query.option2Img = que.Option2Img;
+                        que_query.Option3 = que.Option3;
+                        que_query.option3Img = que.Option3Img;
+                        que_query.StandardAnwser = que.Answer;
+                        que_query.ResolutionTips = que.ResolutionTips;
+                        que_query.Type = que.QueType;
+                        que_query.DifficultLevel = que.DifficultLevel;
+
+                        dbMock.SaveChanges();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogContent.Instance.WriteLog(new AppOpLog
+                    {
+                        LogMessage = "修改试题出错：" + ex.Message,
+                        MethodName = "MockTestPaperController::EditPaper"
+                    }, Log4NetLevel.Error);
+
+                    return new HttpResultModel { success = false, message = "修改试题出脱，请联系工作人员！" };
+                }
+            }
+            return new HttpResultModel { success = true };
+        }
+
+
+        /// <summary>
+        /// 修改题目内容--护理专业
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("edit/question_nurse/{specialtyId}")]
+        public async Task<HttpResultModel> EditPaper_NurseAsync(string specialtyId, PutQuestionA_Model model)
+        {
+            string isAllow = ConfigurationManager.AppSettings["isAllowModiftQue"];
+
+            if (isAllow == "false")
+            {
+                return new HttpResultModel { success = false, message = "当前不允许修改试题" };
+            }
+
+            if (string.IsNullOrEmpty(specialtyId) || model is null)
+                return new HttpResultModel { success = false, message = "参数异常" };
+
+            using (DbMockTestPaperSchoolContext dbMock = new DbMockTestPaperSchoolContext())
+            {
+                try
+                {
+                    if (model.TypeId == 3)//A3题型
+                    {
+                        if (!string.IsNullOrEmpty(model.GeneralNo))
+                        {
+                            var gerenal = await dbMock.UserQuestionMockTestPaperGeneral
+                                .FirstOrDefaultAsync(u => u.GeneralNo == model.GeneralNo);
+
+                            if (gerenal != null)
+                            {
+                                gerenal.GeneralQueName = model.GeneralName;
+                                gerenal.NameImg = (model.NameImg == null || model.NameImg.Length == 0) ? null : model.NameImg;
+                                await dbMock.SaveChangesAsync();
+                            }
+
+                        }
                     }
 
-                    que_query.Name = que.QueContent;
-                    que_query.nameImg = que.NameImg;
-                    que_query.Option0 = que.Option0;
-                    que_query.option0Img = que.Option0Img;
-                    que_query.Option1 = que.Option1;
-                    que_query.option1Img = que.Option1Img;
-                    que_query.Option2 = que.Option2;
-                    que_query.option2Img = que.Option2Img;
-                    que_query.Option3 = que.Option3;
-                    que_query.option3Img = que.Option3Img;
-                    que_query.StandardAnwser = que.Answer;
-                    que_query.ResolutionTips = que.ResolutionTips;
-                    que_query.Type = que.QueType;
-                    que_query.DifficultLevel = que.DifficultLevel;
+                    if (model.Questions != null)
+                    {
+                        foreach (var que in model.Questions)
+                        {
+                            var que_query = dbMock.Questionsinfo_New
+                                .FirstOrDefault(q => q.sourcedoc == "UserQuestionMockPaper" && q.No == que.No);
 
-                    dbMock.SaveChanges();
+                            que_query.Name = que.QueContent;
+                            que_query.nameImg = que.NameImg;
+                            que_query.Option0 = que.Option0;
+                            que_query.option0Img = que.Option0Img;
+                            que_query.Option1 = que.Option1;
+                            que_query.option1Img = que.Option1Img;
+                            que_query.Option2 = que.Option2;
+                            que_query.option2Img = que.Option2Img;
+                            que_query.Option3 = que.Option3;
+                            que_query.option3Img = que.Option3Img;
+                            que_query.StandardAnwser = que.Answer;
+                            que_query.ResolutionTips = que.ResolutionTips;
+                            que_query.Type = que.QueType;
+                            que_query.DifficultLevel = que.DifficultLevel;
+                            que_query.FK_CourseType = que.CourseNo;
+                            que_query.FK_KnowledgePoint = que.KnowNo;
+
+                            await dbMock.SaveChangesAsync();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogContent.Instance.WriteLog(new AppOpLog
+                    {
+                        LogMessage = "修改试题出错：" + ex.Message,
+                        MethodName = "MockTestPaperController::EditPaper_NurseAsync"
+                    }, Log4NetLevel.Error);
+
+                    return new HttpResultModel { success = false, message = "修改试题出脱，请联系工作人员！" };
                 }
             }
             return new HttpResultModel { success = true };
@@ -840,10 +1097,11 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                 return new HttpResultModel { success = false, message = "参数异常" };
 
             //代表题目选项为图片，无法对比
-            if (string.IsNullOrWhiteSpace(checkModel.SpecialtyId)
-                || string.IsNullOrWhiteSpace(checkModel.SpecialtyId)
-                || string.IsNullOrWhiteSpace(checkModel.SpecialtyId)
-                || string.IsNullOrWhiteSpace(checkModel.SpecialtyId))
+            if (string.IsNullOrWhiteSpace(checkModel.QueContent)
+                || string.IsNullOrWhiteSpace(checkModel.OptionA)
+                || string.IsNullOrWhiteSpace(checkModel.OptionB)
+                || string.IsNullOrWhiteSpace(checkModel.OptionC)
+                || string.IsNullOrWhiteSpace(checkModel.OptionD))
             {
                 return new HttpResultModel { success = true };
             }
@@ -942,12 +1200,6 @@ namespace TTLXWebAPIServer.Api.MockTestPaperController
                     data = rule
                 };
             }
-
-
-
-
-
-
 
         }
 

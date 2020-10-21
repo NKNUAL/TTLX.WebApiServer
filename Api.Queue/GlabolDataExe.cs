@@ -85,6 +85,8 @@ namespace Api.Queue
                     return new PaperQuestionQueueData();
                 case QueueDataType.MockTestPaper:
                     return new MockTestPaperQueueData();
+                case QueueDataType.MockTestPaperNurse:
+                    return new MockTestPaperNurseQueueData();
                 default:
                     return null;
             }
